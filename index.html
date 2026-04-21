@@ -1,1 +1,1509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Harian Radiologi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --bg2: #0d1426;
+    --card: #111827;
+    --card2: #1a2236;
+    --border: #1e2d45;
+    --border2: #243352;
+    --accent: #00d4ff;
+    --accent2: #0099cc;
+    --accent3: #00ff88;
+    --accent4: #ff6b35;
+    --text: #e8f0fe;
+    --text2: #94a3c4;
+    --text3: #5a6d8a;
+    --danger: #ff4757;
+    --warn: #ffa726;
+    --success: #00e676;
+    --glow: 0 0 20px rgba(0,212,255,0.15);
+    --glow2: 0 0 40px rgba(0,212,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  /* BACKGROUND EFFECT */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,212,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(0,153,204,0.03) 0%, transparent 70%);
+    pointer-events:none;
+    z-index:0;
+  }
 
+  /* ====== HEADER ====== */
+  .header {
+    background: linear-gradient(135deg, #0d1426 0%, #111827 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 16px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 0 16px rgba(0,212,255,0.3);
+    flex-shrink: 0;
+  }
+  .logo-text { line-height: 1.2; }
+  .logo-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .logo-sub { font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
+  .header-nav { display: flex; gap: 8px; }
+  .nav-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--card2);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .nav-btn.active {
+    box-shadow: 0 0 12px rgba(0,212,255,0.2);
+  }
+
+  /* ====== TABS ====== */
+  .page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+  .page.active { display: block; }
+
+  /* ====== DASHBOARD ====== */
+  .dash-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .dash-title { font-size: 26px; font-weight: 800; }
+  .dash-title span { color: var(--accent); }
+  .dash-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .refresh-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .refresh-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,212,255,0.4); }
+
+  /* STATS ROW */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .stat-card::before {
+    content:'';
+    position: absolute;
+    top:0; left:0; right:0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .stat-card.blue::before { background: var(--accent); }
+  .stat-card.green::before { background: var(--accent3); }
+  .stat-card.orange::before { background: var(--accent4); }
+  .stat-card.purple::before { background: #b388ff; }
+  .stat-card.teal::before { background: #4dd0e1; }
+  .stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 8px; }
+  .stat-value { font-size: 32px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+  .stat-card.blue .stat-value { color: var(--accent); }
+  .stat-card.green .stat-value { color: var(--accent3); }
+  .stat-card.orange .stat-value { color: var(--accent4); }
+  .stat-card.purple .stat-value { color: #b388ff; }
+  .stat-card.teal .stat-value { color: #4dd0e1; }
+  .stat-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 32px; opacity: 0.12; }
+
+  /* DASHBOARD CARDS */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .dash-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .dash-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dash-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text2);
+  }
+  .badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .badge-blue { background: rgba(0,212,255,0.15); color: var(--accent); }
+  .badge-green { background: rgba(0,255,136,0.15); color: var(--accent3); }
+  .badge-orange { background: rgba(255,107,53,0.15); color: var(--accent4); }
+  .dash-card-body { padding: 16px 20px; }
+  .report-list { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
+  .report-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .report-item:hover { border-color: var(--accent); background: var(--card2); }
+  .report-item-date { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); min-width: 80px; }
+  .report-item-info { flex: 1; min-width: 0; }
+  .report-item-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .report-item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .report-item-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+  .empty-state p { font-size: 13px; }
+
+  /* MUTU TABLE */
+  .mutu-summary { display: flex; flex-direction: column; gap: 6px; }
+  .mutu-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .mutu-row:last-child { border-bottom: none; }
+  .mutu-no { font-size: 11px; color: var(--text3); min-width: 20px; }
+  .mutu-name { flex: 1; font-size: 12px; color: var(--text2); }
+  .mutu-val { font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .mutu-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .status-ok { background: var(--success); }
+  .status-warn { background: var(--warn); }
+  .status-na { background: var(--text3); }
+
+  /* ====== FORM PAGE ====== */
+  .form-header { margin-bottom: 28px; }
+  .form-title { font-size: 24px; font-weight: 800; }
+  .form-title span { color: var(--accent); }
+  .form-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .section-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg2);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .section-head:hover { background: var(--card2); }
+  .section-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: rgba(0,212,255,0.15); }
+  .icon-green { background: rgba(0,255,136,0.15); }
+  .icon-orange { background: rgba(255,107,53,0.15); }
+  .icon-purple { background: rgba(179,136,255,0.15); }
+  .icon-teal { background: rgba(77,208,225,0.15); }
+  .icon-pink { background: rgba(255,80,120,0.15); }
+  .section-title { font-size: 14px; font-weight: 700; flex: 1; }
+  .toggle-icon { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
+  .section-body { padding: 20px; }
+  .section-body.collapsed { display: none; }
+
+  /* FORM ELEMENTS */
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .field-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.cols4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .field-row.full { grid-template-columns: 1fr; }
+  @media(max-width: 640px) {
+    .field-row, .field-row.cols3, .field-row.cols4 { grid-template-columns: 1fr; }
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: 0.3px; }
+  .field input, .field select, .field textarea {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 9px 12px;
+    outline: none;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+    background: var(--card2);
+  }
+  .field select option { background: var(--card); }
+  .field textarea { resize: vertical; min-height: 80px; }
+
+  /* DISTRIBUSI BLOCK */
+  .dist-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .dist-title { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .dist-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dist-row:last-child { margin-bottom: 0; }
+  .dist-label { font-size: 12px; color: var(--text2); min-width: 50px; }
+  .dist-inputs { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
+  .dist-field { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 70px; }
+  .dist-field span { font-size: 10px; color: var(--text3); }
+  .dist-field input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 6px 10px;
+    outline: none;
+    width: 100%;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .dist-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,212,255,0.1); }
+  .dist-total { font-size: 13px; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; min-width: 30px; text-align: right; }
+
+  /* DYNAMIC TABLE */
+  .dyn-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+  .dyn-table th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text3);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dyn-table td { padding: 6px 12px; border-bottom: 1px solid rgba(30,45,69,0.5); }
+  .dyn-table td input, .dyn-table td select {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 10px;
+    outline: none;
+    width: 100%;
+    transition: all 0.2s;
+  }
+  .dyn-table td input:focus, .dyn-table td select:focus {
+    border-color: var(--accent);
+  }
+  .dyn-table .del-btn {
+    background: rgba(255,71,87,0.15);
+    border: 1px solid rgba(255,71,87,0.2);
+    color: var(--danger);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .dyn-table .del-btn:hover { background: rgba(255,71,87,0.3); }
+  .add-row-btn {
+    background: rgba(0,212,255,0.1);
+    border: 1px dashed rgba(0,212,255,0.3);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .add-row-btn:hover { background: rgba(0,212,255,0.15); border-style: solid; }
+
+  /* MUTU TABLE FORM */
+  .mutu-table { width: 100%; border-collapse: collapse; }
+  .mutu-table th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text3);
+    padding: 10px 12px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .mutu-table th:last-child { text-align: center; }
+  .mutu-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(30,45,69,0.6);
+    font-size: 12px;
+  }
+  .mutu-table tr:last-child td { border-bottom: none; }
+  .mutu-table tr:hover td { background: rgba(0,212,255,0.03); }
+  .mutu-table .no-col { color: var(--text3); width: 32px; }
+  .mutu-table .ind-col { color: var(--text2); }
+  .mutu-table .target-col { color: var(--warn); font-family: 'JetBrains Mono', monospace; font-weight: 600; width: 90px; }
+  .mutu-table .cap-col { width: 100px; }
+  .mutu-table .cap-col input {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 5px 8px;
+    outline: none;
+    width: 100%;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .mutu-table .cap-col input:focus { border-color: var(--accent); }
+
+  /* PEMBUAT SECTION */
+  .pembuat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .pembuat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pembuat-item:hover { border-color: var(--accent2); }
+  .pembuat-item input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
+  .pembuat-item label { font-size: 12px; cursor: pointer; line-height: 1.3; }
+  .pembuat-item label strong { display: block; color: var(--text); font-weight: 600; font-size: 13px; }
+  .pembuat-item label span { color: var(--text3); font-size: 11px; }
+  .pembuat-item.selected { border-color: var(--accent); background: rgba(0,212,255,0.07); }
+
+  /* SUBMIT */
+  .submit-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .btn-submit {
+    flex: 1;
+    min-width: 140px;
+    padding: 14px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-save {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #000;
+  }
+  .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,212,255,0.35); }
+  .btn-wa {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: #fff;
+  }
+  .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
+  .btn-reset {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid rgba(255,71,87,0.3);
+  }
+  .btn-reset:hover { background: rgba(255,71,87,0.1); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    background: var(--card2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 0.3s;
+    max-width: 320px;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .toast.show { opacity: 1; transform: translateX(0); }
+  .toast.success { border-color: var(--success); }
+  .toast.error { border-color: var(--danger); }
+  .toast-icon { font-size: 18px; }
+
+  /* LOADING */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,15,30,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .loading-overlay.show { opacity: 1; pointer-events: all; }
+  .spinner {
+    width: 48px; height: 48px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* REKAP SECTION */
+  .rekap-box {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,255,136,0.05));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .rekap-item { display: flex; flex-direction: column; gap: 4px; }
+  .rekap-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+  .rekap-val { font-size: 22px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+  .rekap-divider { width: 1px; height: 40px; background: var(--border); }
+
+  /* RESPONSIVE HEADER */
+  @media(max-width: 480px) {
+    .header-nav { gap: 4px; }
+    .nav-btn { padding: 6px 10px; font-size: 12px; }
+    .page { padding: 16px; }
+    .logo-title { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <span id="toastMsg">Berhasil disimpan!</span>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-text">
+        <div class="logo-title">Radiologi Daily Report</div>
+        <div class="logo-sub">RSUD / Klinik Radiologi</div>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn active" onclick="showPage('form')">📋 Input Laporan</button>
+      <button class="nav-btn" onclick="showPage('dashboard')">📊 Dashboard</button>
+    </nav>
+  </div>
+</header>
+
+<!-- =================== FORM PAGE =================== -->
+<div class="page active" id="page-form">
+  <div class="form-header">
+    <div class="form-title">Input <span>Laporan Harian</span></div>
+    <div class="form-sub">Isi data pemeriksaan radiologi hari ini</div>
+  </div>
+
+  <!-- A. RONTGEN -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-blue">🔬</div>
+      <div class="section-title">A. Pemeriksaan Rontgen</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-rontgen">
+      <div class="field-row">
+        <div class="field">
+          <label>Hari / Tanggal</label>
+          <input type="date" id="tanggal">
+        </div>
+        <div class="field">
+          <label>Jumlah Total Rontgen</label>
+          <input type="number" id="rontgen_total" placeholder="0" min="0" oninput="updateRontgenTotal()">
+        </div>
+      </div>
+      <div class="field-row cols4">
+        <div class="field">
+          <label>P4</label>
+          <input type="number" id="rontgen_p4" placeholder="0" min="0" oninput="updateRontgenTotal()">
+        </div>
+        <div class="field">
+          <label>P3</label>
+          <input type="number" id="rontgen_p3" placeholder="0" min="0" oninput="updateRontgenTotal()">
+        </div>
+        <div class="field">
+          <label>Asuransi</label>
+          <input type="number" id="rontgen_ass" placeholder="0" min="0" oninput="updateRontgenTotal()">
+        </div>
+        <div class="field">
+          <label>MCU</label>
+          <input type="number" id="rontgen_mcu" placeholder="0" min="0" oninput="updateRontgenTotal()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. CT SCAN -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-green">💊</div>
+      <div class="section-title">B. CT Scan</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-ct">
+      <div class="field-row full">
+        <div class="field">
+          <label>Jumlah Pemeriksaan CT Scan</label>
+          <input type="number" id="ct_total" placeholder="0" min="0" readonly style="color:var(--accent);font-weight:700;">
+        </div>
+      </div>
+      <div class="dist-block">
+        <div class="dist-title">Distribusi Pasien CT Scan</div>
+        <div id="ct-dist">
+          <!-- generated by JS -->
+        </div>
+      </div>
+      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text2);">Rincian Jenis Pemeriksaan CT Scan</div>
+      <table class="dyn-table">
+        <thead><tr><th>Jenis Pemeriksaan</th><th>Jumlah</th><th></th></tr></thead>
+        <tbody id="ct-jenis-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addJenis('ct-jenis-body')">+ Tambah Jenis Pemeriksaan</button>
+    </div>
+  </div>
+
+  <!-- C. MRI -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-purple">🧲</div>
+      <div class="section-title">C. MRI</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-mri">
+      <div class="field-row full">
+        <div class="field">
+          <label>Jumlah Pemeriksaan MRI</label>
+          <input type="number" id="mri_total" placeholder="0" min="0" readonly style="color:var(--accent);font-weight:700;">
+        </div>
+      </div>
+      <div class="dist-block">
+        <div class="dist-title">Distribusi Pasien MRI</div>
+        <div id="mri-dist"></div>
+      </div>
+      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text2);">Rincian Jenis Pemeriksaan MRI</div>
+      <table class="dyn-table">
+        <thead><tr><th>Jenis Pemeriksaan</th><th>Jumlah</th><th></th></tr></thead>
+        <tbody id="mri-jenis-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addJenis('mri-jenis-body')">+ Tambah Jenis Pemeriksaan</button>
+    </div>
+  </div>
+
+  <!-- D. USG -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-teal">🔊</div>
+      <div class="section-title">D. USG</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-usg">
+      <div class="field-row full">
+        <div class="field">
+          <label>Jumlah Pemeriksaan USG</label>
+          <input type="number" id="usg_total" placeholder="0" min="0" readonly style="color:var(--accent);font-weight:700;">
+        </div>
+      </div>
+      <div class="dist-block">
+        <div class="dist-title">Distribusi Pasien USG</div>
+        <div id="usg-dist"></div>
+      </div>
+      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text2);">Rincian Jenis Pemeriksaan USG</div>
+      <table class="dyn-table">
+        <thead><tr><th>Jenis Pemeriksaan</th><th>Jumlah</th><th></th></tr></thead>
+        <tbody id="usg-jenis-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- E. PEMERIKSAAN LAIN -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-orange">⚡</div>
+      <div class="section-title">E. Pemeriksaan Lain</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-lain">
+      <!-- Panoramic -->
+      <div class="dist-block">
+        <div class="dist-title">Panoramic</div>
+        <div class="dist-row">
+          <div class="dist-inputs">
+            <div class="dist-field"><span>P4</span><input type="number" id="pan_p4" placeholder="0" min="0" oninput="calcLain('pan')"></div>
+            <div class="dist-field"><span>P3</span><input type="number" id="pan_p3" placeholder="0" min="0" oninput="calcLain('pan')"></div>
+            <div class="dist-field"><span>Asuransi</span><input type="number" id="pan_ass" placeholder="0" min="0" oninput="calcLain('pan')"></div>
+            <div class="dist-field"><span>Total</span><input type="number" id="pan_total" readonly style="color:var(--accent);font-weight:700;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- C-Arm -->
+      <div class="dist-block">
+        <div class="dist-title">C-Arm</div>
+        <div class="dist-row">
+          <div class="dist-inputs">
+            <div class="dist-field"><span>P4</span><input type="number" id="carm_p4" placeholder="0" min="0" oninput="calcLain('carm')"></div>
+            <div class="dist-field"><span>P3</span><input type="number" id="carm_p3" placeholder="0" min="0" oninput="calcLain('carm')"></div>
+            <div class="dist-field"><span>Asuransi</span><input type="number" id="carm_ass" placeholder="0" min="0" oninput="calcLain('carm')"></div>
+            <div class="dist-field"><span>Total</span><input type="number" id="carm_total" readonly style="color:var(--accent);font-weight:700;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Cathlab -->
+      <div class="dist-block">
+        <div class="dist-title">Cathlab</div>
+        <div class="dist-row">
+          <div class="dist-inputs">
+            <div class="dist-field"><span>P4</span><input type="number" id="cath_p4" placeholder="0" min="0" oninput="calcLain('cath')"></div>
+            <div class="dist-field"><span>P3</span><input type="number" id="cath_p3" placeholder="0" min="0" oninput="calcLain('cath')"></div>
+            <div class="dist-field"><span>Asuransi</span><input type="number" id="cath_ass" placeholder="0" min="0" oninput="calcLain('cath')"></div>
+            <div class="dist-field"><span>Total</span><input type="number" id="cath_total" readonly style="color:var(--accent);font-weight:700;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- F. PELAYANAN KHUSUS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-pink">🌙</div>
+      <div class="section-title">F. Pelayanan Khusus</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-khusus">
+      <div class="field-row">
+        <div class="field">
+          <label>Laporan Malam (21.00–07.00)</label>
+          <input type="number" id="lap_malam" placeholder="0" min="0"> 
+        </div>
+        <div class="field">
+          <label>Order IGD Tidak Terkirim</label>
+          <input type="number" id="order_igd" placeholder="0" min="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- G. INDIKATOR MUTU -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-green">📈</div>
+      <div class="section-title">G. Indikator Mutu Radiologi</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-mutu">
+      <div style="overflow-x:auto;">
+        <table class="mutu-table" id="mutu-table">
+          <thead>
+            <tr>
+              <th class="no-col">No</th>
+              <th>Indikator</th>
+              <th class="target-col">Target</th>
+              <th class="cap-col" style="text-align:center;">Capaian</th>
+            </tr>
+          </thead>
+          <tbody id="mutu-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- H. REKAP -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-blue">📊</div>
+      <div class="section-title">H. Rekap Indikator</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-rekap">
+      <div class="rekap-box">
+        <div class="rekap-item">
+          <div class="rekap-lbl">Indikator Tercapai</div>
+          <div class="rekap-val" id="rekap-tercapai">—</div>
+        </div>
+        <div class="rekap-divider"></div>
+        <div class="rekap-item">
+          <div class="rekap-lbl">Total Indikator</div>
+          <div class="rekap-val" style="color:var(--text2);">26</div>
+        </div>
+        <div class="rekap-divider"></div>
+        <div class="rekap-item">
+          <div class="rekap-lbl">Persentase Capaian</div>
+          <div class="rekap-val" id="rekap-pct">—</div>
+        </div>
+        <div class="rekap-divider"></div>
+        <div class="rekap-item">
+          <div class="rekap-lbl">Keterlambatan Karyawan</div>
+          <input type="number" id="keterlambatan" placeholder="0" min="0" style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;padding:4px 10px;width:90px;outline:none;text-align:center;">
+        </div>
+      </div>
+      <button class="add-row-btn" onclick="hitungRekap()" style="margin-top:12px;">🔄 Hitung Rekap Otomatis</button>
+    </div>
+  </div>
+
+  <!-- I. DIBUAT OLEH -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-icon icon-orange">👤</div>
+      <div class="section-title">I. Dibuat Oleh</div>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-body" id="sec-pembuat">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:12px;">Pilih nama petugas yang membuat laporan:</div>
+      <div class="pembuat-grid" id="pembuat-grid"></div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-row">
+    <button class="btn-submit btn-save" onclick="submitForm()">💾 Simpan ke Database</button>
+    <button class="btn-submit btn-wa" onclick="kirimWA()">📲 Kirim via WhatsApp</button>
+    <button class="btn-submit btn-reset" onclick="resetForm()" style="flex:0;min-width:100px;">🗑 Reset</button>
+  </div>
+</div>
+
+<!-- =================== DASHBOARD PAGE =================== -->
+<div class="page" id="page-dashboard">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">Dashboard <span>Radiologi</span></div>
+      <div class="dash-sub" id="dash-date">Memuat data...</div>
+    </div>
+    <button class="refresh-btn" onclick="loadDashboard()">🔄 Refresh</button>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card blue">
+      <div class="stat-label">Total Rontgen</div>
+      <div class="stat-value" id="ds-rontgen">—</div>
+      <div class="stat-icon">🔬</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Total CT Scan</div>
+      <div class="stat-value" id="ds-ct">—</div>
+      <div class="stat-icon">💊</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-label">Total MRI</div>
+      <div class="stat-value" id="ds-mri">—</div>
+      <div class="stat-icon">🧲</div>
+    </div>
+    <div class="stat-card teal">
+      <div class="stat-label">Total USG</div>
+      <div class="stat-value" id="ds-usg">—</div>
+      <div class="stat-icon">🔊</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-label">Capaian Mutu</div>
+      <div class="stat-value" id="ds-mutu">—</div>
+      <div class="stat-icon">📈</div>
+    </div>
+  </div>
+
+  <!-- DASH GRID -->
+  <div class="dash-grid">
+    <!-- Laporan Terbaru -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title">📋 Laporan Terbaru</div>
+        <span class="badge badge-blue" id="dash-count">0</span>
+      </div>
+      <div class="dash-card-body">
+        <div class="report-list" id="report-list">
+          <div class="empty-state"><div class="icon">📭</div><p>Belum ada laporan</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indikator Mutu Terbaru -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title">📊 Indikator Mutu Terbaru</div>
+        <span class="badge badge-green" id="dash-mutu-pct">—</span>
+      </div>
+      <div class="dash-card-body">
+        <div id="mutu-summary-list">
+          <div class="empty-state"><div class="icon">📉</div><p>Belum ada data mutu</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE + APP SCRIPT -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, get, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADP3wRV5au67aPOC6NFzT7bDQQ7dYLDks",
+  authDomain: "laporan-day-rad.firebaseapp.com",
+  databaseURL: "https://laporan-day-rad-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "laporan-day-rad",
+  storageBucket: "laporan-day-rad.firebasestorage.app",
+  messagingSenderId: "591002194447",
+  appId: "1:591002194447:web:8b565c3d90eabee5e8497a",
+  measurementId: "G-8ENQNZ31QH"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window._db = db;
+window._ref = ref;
+window._push = push;
+window._get = get;
+window._query = query;
+window._orderByChild = orderByChild;
+window._limitToLast = limitToLast;
+
+// Initialize page
+window.initAll();
+</script>
+
+<script>
+// ====== DATA ======
+const PETUGAS = [
+  { name: "Fahmi Puja Ashri", cred: "A.Md.Rad" },
+  { name: "Gilang Nurgianti Fadilah", cred: "A.Md.Rad" },
+  { name: "Ardi Pratama Oktafiansyah", cred: "A.Md.Rad" },
+  { name: "Zhafira Nur Hasanah", cred: "A.Md.Rad" },
+  { name: "Dwi Alfi Pramesti", cred: "A.Md.Rad" },
+  { name: "Rita Riana", cred: "A.Md.Rad" },
+  { name: "Muhammad Rizky Maulana", cred: "A.Md.Kes" },
+  { name: "Muhammad Rafi Azhar", cred: "A.Md.Kes" },
+  { name: "Dias Riyandi", cred: "A.Md.Kes" },
+  { name: "Mochamad Taufik H", cred: "A.Md.Kes" },
+  { name: "Arief Maulana", cred: "A.Md.Kes" },
+  { name: "Salsa Dea Charira", cred: "A.Md.Kes" },
+];
+
+const INDIKATOR_MUTU = [
+  { no:1, name:"Respon time bedah ≤ 60 menit", target:"100%" },
+  { no:2, name:"Waktu tunggu Cito ≤ 30 menit", target:"100%" },
+  { no:3, name:"Expertise kritis ≤ 30 menit", target:"100%" },
+  { no:4, name:"Upload foto IGD ≤ 10 menit", target:"≥90%" },
+  { no:5, name:"Pengulangan pemeriksaan", target:"≤5%" },
+  { no:6, name:"CT Scan non kontras ≤120 menit", target:"≥90%" },
+  { no:7, name:"MRI non kontras ≤180 menit", target:"≥90%" },
+  { no:8, name:"Thorax poliklinik ≤40 menit", target:"≤40 mnt" },
+  { no:9, name:"Keterlambatan thorax ≥30 mnt", target:"≤20%" },
+  { no:10, name:"USG Abdomen ≤30 menit", target:"≤30 mnt" },
+  { no:11, name:"Keterlambatan USG ≥30 mnt", target:"≤20%" },
+  { no:12, name:"Panoramic ≤120 menit", target:"≤120 mnt" },
+  { no:13, name:"Keterlambatan panoramic", target:"≤20%" },
+  { no:14, name:"Upload CT kontras ≤60 menit", target:"≥90%" },
+  { no:15, name:"Upload CT non kontras ≤30 menit", target:"≥90%" },
+  { no:16, name:"Upload MRI kontras ≤60 menit", target:"≥90%" },
+  { no:17, name:"Upload MRI non kontras ≤30 menit", target:"≥90%" },
+  { no:18, name:"Kerusakan alat", target:"≤5%" },
+  { no:19, name:"Kepatuhan hand hygiene", target:"100%" },
+  { no:20, name:"Identifikasi pasien", target:"100%" },
+  { no:21, name:"Penggunaan APD", target:"100%" },
+  { no:22, name:"Kesalahan pemeriksaan", target:"0" },
+  { no:23, name:"Pasien jatuh", target:"0" },
+  { no:24, name:"Kegagalan PME", target:"0" },
+  { no:25, name:"Kegagalan PMI", target:"0" },
+  { no:26, name:"Komplain pasien", target:"0" },
+];
+
+const USG_TYPES = [
+  "USG Whole Abdomen","USG Upper Abdomen","USG Lower Abdomen",
+  "USG Thyroid / Leher","USG Doppler","USG Testis",
+  "USG Kandungan (UP. Radiolog)","USG Kandungan","USG Lower (UP. Sp. Urologi)",
+  "USG Appendix","USG Ekstremitas","USG Soft Tissue",
+  "USG Thorax Marker","USG Guiding","USG Mammae"
+];
+
+const DIST_KATS = ['ct','mri','usg'];
+const DIST_ROWS = {
+  ct:  ['Klinik','Ranap','IGD'],
+  mri: ['Klinik','Ranap','IGD','Luar'],
+  usg: ['Klinik','Ranap','IGD','Luar'],
+};
+
+// ====== INIT ======
+window.initAll = function() {
+  // Set today's date
+  document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+
+  // Build dist grids
+  DIST_KATS.forEach(k => buildDist(k));
+
+  // Build mutu table
+  buildMutuTable();
+
+  // Build petugas
+  buildPetugas();
+
+  // Build USG jenis (fixed)
+  buildUSGJenis();
+
+  // Add default row for CT & MRI
+  addJenis('ct-jenis-body');
+  addJenis('mri-jenis-body');
+
+  // Load dashboard data
+  setTimeout(loadDashboard, 1500);
+};
+
+function buildDist(key) {
+  const container = document.getElementById(key + '-dist');
+  const rows = DIST_ROWS[key];
+  container.innerHTML = '';
+  rows.forEach(row => {
+    const id = key + '_' + row.toLowerCase().replace(/\W/g,'');
+    const div = document.createElement('div');
+    div.className = 'dist-row';
+    div.innerHTML = `
+      <div class="dist-label">${row}</div>
+      <div class="dist-inputs">
+        <div class="dist-field"><span>P4</span><input type="number" id="${id}_p4" placeholder="0" min="0" oninput="calcDist('${key}')"></div>
+        <div class="dist-field"><span>P3</span><input type="number" id="${id}_p3" placeholder="0" min="0" oninput="calcDist('${key}')"></div>
+        <div class="dist-field"><span>Ass</span><input type="number" id="${id}_ass" placeholder="0" min="0" oninput="calcDist('${key}')"></div>
+        <div class="dist-field"><span>Sub</span><input type="number" id="${id}_sub" readonly style="color:var(--accent3);font-weight:700;"></div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function buildMutuTable() {
+  const tbody = document.getElementById('mutu-body');
+  tbody.innerHTML = '';
+  INDIKATOR_MUTU.forEach(ind => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="no-col">${ind.no}</td>
+      <td class="ind-col">${ind.name}</td>
+      <td class="target-col">${ind.target}</td>
+      <td class="cap-col"><input type="text" id="mutu_${ind.no}" placeholder="..."></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function buildPetugas() {
+  const grid = document.getElementById('pembuat-grid');
+  grid.innerHTML = '';
+  PETUGAS.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'pembuat-item';
+    div.id = 'pitem_' + i;
+    div.innerHTML = `
+      <input type="checkbox" id="pcheck_${i}" onchange="togglePembuat(${i})">
+      <label for="pcheck_${i}">
+        <strong>${p.name}</strong>
+        <span>${p.cred}</span>
+      </label>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function buildUSGJenis() {
+  const tbody = document.getElementById('usg-jenis-body');
+  tbody.innerHTML = '';
+  USG_TYPES.forEach(type => {
+    const tr = document.createElement('tr');
+    const safeId = 'usg_' + type.replace(/\W/g, '_');
+    tr.innerHTML = `
+      <td style="font-size:13px;color:var(--text2);">${type}</td>
+      <td><input type="number" id="${safeId}" placeholder="0" min="0" oninput="calcDist('usg')"></td>
+      <td></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ====== TOGGLE ======
+window.toggleSection = function(head) {
+  const body = head.nextElementSibling;
+  const icon = head.querySelector('.toggle-icon');
+  body.classList.toggle('collapsed');
+  icon.textContent = body.classList.contains('collapsed') ? '▶' : '▼';
+};
+
+window.togglePembuat = function(i) {
+  const div = document.getElementById('pitem_' + i);
+  const cb = document.getElementById('pcheck_' + i);
+  div.classList.toggle('selected', cb.checked);
+};
+
+// ====== CALC ======
+window.updateRontgenTotal = function() {
+  const p4 = +document.getElementById('rontgen_p4').value||0;
+  const p3 = +document.getElementById('rontgen_p3').value||0;
+  const ass = +document.getElementById('rontgen_ass').value||0;
+  const mcu = +document.getElementById('rontgen_mcu').value||0;
+  document.getElementById('rontgen_total').value = p4+p3+ass+mcu;
+};
+
+window.calcDist = function(key) {
+  const rows = DIST_ROWS[key];
+  let total = 0;
+  rows.forEach(row => {
+    const id = key + '_' + row.toLowerCase().replace(/\W/g,'');
+    const p4 = +document.getElementById(id+'_p4')?.value||0;
+    const p3 = +document.getElementById(id+'_p3')?.value||0;
+    const ass = +document.getElementById(id+'_ass')?.value||0;
+    const sub = p4+p3+ass;
+    const subEl = document.getElementById(id+'_sub');
+    if(subEl) subEl.value = sub;
+    total += sub;
+  });
+  if(key === 'usg') {
+    // also sum jenis
+    let jenisTotal = 0;
+    USG_TYPES.forEach(type => {
+      const safeId = 'usg_' + type.replace(/\W/g, '_');
+      jenisTotal += +document.getElementById(safeId)?.value||0;
+    });
+    total = Math.max(total, jenisTotal);
+  }
+  document.getElementById(key+'_total').value = total;
+};
+
+window.calcLain = function(prefix) {
+  const p4 = +document.getElementById(prefix+'_p4').value||0;
+  const p3 = +document.getElementById(prefix+'_p3').value||0;
+  const ass = +document.getElementById(prefix+'_ass').value||0;
+  document.getElementById(prefix+'_total').value = p4+p3+ass;
+};
+
+// ====== DYNAMIC ROWS ======
+window.addJenis = function(tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" placeholder="Nama jenis pemeriksaan..."></td>
+    <td><input type="number" placeholder="0" min="0"></td>
+    <td><button class="del-btn" onclick="this.closest('tr').remove()">✕ Hapus</button></td>
+  `;
+  tbody.appendChild(tr);
+};
+
+// ====== REKAP ======
+window.hitungRekap = function() {
+  let tercapai = 0;
+  INDIKATOR_MUTU.forEach(ind => {
+    const val = document.getElementById('mutu_'+ind.no).value.trim();
+    if(val && val !== '' && val !== '....') tercapai++;
+  });
+  document.getElementById('rekap-tercapai').textContent = tercapai;
+  const pct = Math.round(tercapai/26*100);
+  document.getElementById('rekap-pct').textContent = pct + '%';
+};
+
+// ====== COLLECT DATA ======
+function collectData() {
+  const tanggal = document.getElementById('tanggal').value;
+  const data = {
+    tanggal,
+    timestamp: Date.now(),
+    rontgen: {
+      total: +document.getElementById('rontgen_total').value||0,
+      p4: +document.getElementById('rontgen_p4').value||0,
+      p3: +document.getElementById('rontgen_p3').value||0,
+      asuransi: +document.getElementById('rontgen_ass').value||0,
+      mcu: +document.getElementById('rontgen_mcu').value||0,
+    },
+    ct: collectModality('ct'),
+    mri: collectModality('mri'),
+    usg: collectUSG(),
+    lain: {
+      panoramic: { p4:+document.getElementById('pan_p4').value||0, p3:+document.getElementById('pan_p3').value||0, ass:+document.getElementById('pan_ass').value||0, total:+document.getElementById('pan_total').value||0 },
+      carm: { p4:+document.getElementById('carm_p4').value||0, p3:+document.getElementById('carm_p3').value||0, ass:+document.getElementById('carm_ass').value||0, total:+document.getElementById('carm_total').value||0 },
+      cathlab: { p4:+document.getElementById('cath_p4').value||0, p3:+document.getElementById('cath_p3').value||0, ass:+document.getElementById('cath_ass').value||0, total:+document.getElementById('cath_total').value||0 },
+    },
+    pelayanan: {
+      malam: +document.getElementById('lap_malam').value||0,
+      igd_tidak_terkirim: +document.getElementById('order_igd').value||0,
+    },
+    mutu: collectMutu(),
+    rekap: {
+      tercapai: document.getElementById('rekap-tercapai').textContent,
+      total: 26,
+      pct: document.getElementById('rekap-pct').textContent,
+      keterlambatan: +document.getElementById('keterlambatan').value||0,
+    },
+    pembuat: getPembuat(),
+  };
+  return data;
+}
+
+function collectModality(key) {
+  const rows = DIST_ROWS[key];
+  const dist = {};
+  rows.forEach(row => {
+    const id = key + '_' + row.toLowerCase().replace(/\W/g,'');
+    dist[row] = {
+      p4: +document.getElementById(id+'_p4')?.value||0,
+      p3: +document.getElementById(id+'_p3')?.value||0,
+      ass: +document.getElementById(id+'_ass')?.value||0,
+    };
+  });
+  const jenisTbody = document.getElementById(key+'-jenis-body');
+  const jenis = [];
+  jenisTbody.querySelectorAll('tr').forEach(tr => {
+    const inputs = tr.querySelectorAll('input');
+    if(inputs[0]?.value) jenis.push({ nama: inputs[0].value, jumlah: +inputs[1]?.value||0 });
+  });
+  return { total: +document.getElementById(key+'_total').value||0, distribusi: dist, jenis };
+}
+
+function collectUSG() {
+  const rows = DIST_ROWS['usg'];
+  const dist = {};
+  rows.forEach(row => {
+    const id = 'usg_' + row.toLowerCase().replace(/\W/g,'');
+    dist[row] = {
+      p4: +document.getElementById(id+'_p4')?.value||0,
+      p3: +document.getElementById(id+'_p3')?.value||0,
+      ass: +document.getElementById(id+'_ass')?.value||0,
+    };
+  });
+  const jenis = {};
+  USG_TYPES.forEach(type => {
+    const safeId = 'usg_' + type.replace(/\W/g, '_');
+    const val = +document.getElementById(safeId)?.value||0;
+    if(val > 0) jenis[type] = val;
+  });
+  return { total: +document.getElementById('usg_total').value||0, distribusi: dist, jenis };
+}
+
+function collectMutu() {
+  const mutu = {};
+  INDIKATOR_MUTU.forEach(ind => {
+    mutu['ind_'+ind.no] = document.getElementById('mutu_'+ind.no)?.value || '';
+  });
+  return mutu;
+}
+
+function getPembuat() {
+  const result = [];
+  PETUGAS.forEach((p, i) => {
+    if(document.getElementById('pcheck_'+i)?.checked) result.push(p.name + ', ' + p.cred);
+  });
+  return result;
+}
+
+// ====== SUBMIT ======
+window.submitForm = async function() {
+  const tanggal = document.getElementById('tanggal').value;
+  if(!tanggal) { showToast('❗ Pilih tanggal terlebih dahulu!', 'error'); return; }
+  showLoading(true);
+  try {
+    const data = collectData();
+    const db = window._db;
+    const r = window._ref(db, 'laporan/' + tanggal.replace(/-/g,'_'));
+    await window._push(r, data);
+    showToast('✅ Laporan berhasil disimpan!', 'success');
+  } catch(e) {
+    console.error(e);
+    showToast('❌ Gagal menyimpan: ' + e.message, 'error');
+  }
+  showLoading(false);
+};
+
+// ====== WA ======
+window.kirimWA = function() {
+  const data = collectData();
+  const tgl = data.tanggal || '—';
+  const fmt = (v) => v || '0';
+
+  let msg = `*LAPORAN HARIAN RADIOLOGI*\n`;
+  msg += `Hari/Tanggal: ${tgl}\n\n`;
+  msg += `*A. PEMERIKSAAN RONTGEN*\n`;
+  msg += `Jumlah: ${fmt(data.rontgen.total)}\n`;
+  msg += `P4: ${fmt(data.rontgen.p4)} | P3: ${fmt(data.rontgen.p3)} | Asuransi: ${fmt(data.rontgen.asuransi)} | MCU: ${fmt(data.rontgen.mcu)}\n\n`;
+  msg += `*B. CT SCAN*\nJumlah: ${fmt(data.ct.total)}\n`;
+  const ctDist = data.ct.distribusi;
+  Object.keys(ctDist).forEach(k => {
+    const d = ctDist[k];
+    msg += `${k}: ${(d.p4||0)+(d.p3||0)+(d.ass||0)} (P4:${d.p4||0}, P3:${d.p3||0}, Ass:${d.ass||0})\n`;
+  });
+  msg += `\n*C. MRI*\nJumlah: ${fmt(data.mri.total)}\n`;
+  const mriDist = data.mri.distribusi;
+  Object.keys(mriDist).forEach(k => {
+    const d = mriDist[k];
+    msg += `${k}: ${(d.p4||0)+(d.p3||0)+(d.ass||0)} (P4:${d.p4||0}, P3:${d.p3||0}, Ass:${d.ass||0})\n`;
+  });
+  msg += `\n*D. USG*\nJumlah: ${fmt(data.usg.total)}\n`;
+  const usgDist = data.usg.distribusi;
+  Object.keys(usgDist).forEach(k => {
+    const d = usgDist[k];
+    msg += `${k}: ${(d.p4||0)+(d.p3||0)+(d.ass||0)} (P4:${d.p4||0}, P3:${d.p3||0}, Ass:${d.ass||0})\n`;
+  });
+  msg += `\n*E. PEMERIKSAAN LAIN*\n`;
+  msg += `Panoramic: ${data.lain.panoramic.total} | C-Arm: ${data.lain.carm.total} | Cathlab: ${data.lain.cathlab.total}\n`;
+  msg += `\n*F. PELAYANAN KHUSUS*\n`;
+  msg += `Laporan malam: ${data.pelayanan.malam} | Order IGD tidak terkirim: ${data.pelayanan.igd_tidak_terkirim}\n`;
+  msg += `\n*G. REKAP INDIKATOR MUTU*\n`;
+  msg += `Tercapai: ${data.rekap.tercapai} / 26 (${data.rekap.pct})\n`;
+  msg += `Keterlambatan karyawan: ${data.rekap.keterlambatan}\n`;
+  if(data.pembuat.length) {
+    msg += `\n*Dibuat Oleh:*\n${data.pembuat.join('\n')}\n`;
+  }
+
+  const encoded = encodeURIComponent(msg);
+  const wa = `https://wa.me/628984290300?text=${encoded}`;
+  window.open(wa, '_blank');
+};
+
+// ====== DASHBOARD ======
+window.loadDashboard = async function() {
+  const now = new Date();
+  document.getElementById('dash-date').textContent = 'Update: ' + now.toLocaleString('id-ID');
+  showLoading(true);
+  try {
+    const db = window._db;
+    const r = window._ref(db, 'laporan');
+    const snap = await window._get(r);
+    if(!snap.exists()) {
+      showLoading(false);
+      return;
+    }
+    const allData = snap.val();
+    // flatten
+    const reports = [];
+    Object.keys(allData).forEach(dayKey => {
+      const dayData = allData[dayKey];
+      Object.keys(dayData).forEach(pushKey => {
+        reports.push({ key: pushKey, ...dayData[pushKey] });
+      });
+    });
+    reports.sort((a,b) => b.timestamp - a.timestamp);
+    renderDashboard(reports);
+  } catch(e) {
+    console.error(e);
+  }
+  showLoading(false);
+};
+
+function renderDashboard(reports) {
+  const latest = reports[0];
+  if(latest) {
+    document.getElementById('ds-rontgen').textContent = latest.rontgen?.total ?? '—';
+    document.getElementById('ds-ct').textContent = latest.ct?.total ?? '—';
+    document.getElementById('ds-mri').textContent = latest.mri?.total ?? '—';
+    document.getElementById('ds-usg').textContent = latest.usg?.total ?? '—';
+    document.getElementById('ds-mutu').textContent = latest.rekap?.pct ?? '—';
+    document.getElementById('dash-mutu-pct').textContent = latest.rekap?.pct ?? '—';
+    renderMutuSummary(latest.mutu);
+  }
+  document.getElementById('dash-count').textContent = reports.length;
+  renderReportList(reports);
+}
+
+function renderReportList(reports) {
+  const list = document.getElementById('report-list');
+  if(!reports.length) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Belum ada laporan</p></div>';
+    return;
+  }
+  list.innerHTML = reports.slice(0,20).map(r => {
+    const d = r.tanggal || '—';
+    const total = (r.rontgen?.total||0) + (r.ct?.total||0) + (r.mri?.total||0) + (r.usg?.total||0);
+    const pembuat = r.pembuat?.length ? r.pembuat[0].split(',')[0] : 'Petugas';
+    return `<div class="report-item">
+      <div class="report-item-date">${d}</div>
+      <div class="report-item-info">
+        <div class="report-item-name">Laporan ${d}</div>
+        <div class="report-item-meta">Oleh: ${pembuat}</div>
+      </div>
+      <div class="report-item-count">${total}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMutuSummary(mutu) {
+  const el = document.getElementById('mutu-summary-list');
+  if(!mutu) { el.innerHTML = '<div class="empty-state"><div class="icon">📉</div><p>Tidak ada data</p></div>'; return; }
+  const items = INDIKATOR_MUTU.slice(0, 12);
+  el.innerHTML = '<div class="mutu-summary">' + items.map(ind => {
+    const val = mutu['ind_'+ind.no] || '—';
+    const hasVal = val && val !== '—' && val !== '....';
+    return `<div class="mutu-row">
+      <div class="mutu-no">${ind.no}</div>
+      <div class="mutu-name">${ind.name}</div>
+      <div class="mutu-val" style="color:var(--accent)">${val}</div>
+      <div class="mutu-status ${hasVal ? 'status-ok' : 'status-na'}"></div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+// ====== UTILS ======
+window.showPage = function(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  event.target.classList.add('active');
+  if(page === 'dashboard') loadDashboard();
+};
+
+function showLoading(show) {
+  document.getElementById('loadingOverlay').classList.toggle('show', show);
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast ' + type;
+  icon.textContent = type === 'success' ? '✅' : '❌';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+window.resetForm = function() {
+  if(!confirm('Reset semua data form?')) return;
+  document.querySelectorAll('input[type=number], input[type=text], input[type=date]').forEach(el => el.value = '');
+  document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+  document.querySelectorAll('.pembuat-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+  document.getElementById('rekap-tercapai').textContent = '—';
+  document.getElementById('rekap-pct').textContent = '—';
+};
+</script>
+</body>
+</html>
