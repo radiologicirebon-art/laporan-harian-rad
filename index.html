@@ -4,670 +4,689 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laporan Harian Radiologi</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0f1e;
-    --bg2: #0d1426;
-    --card: #111827;
-    --card2: #1a2236;
-    --border: #1e2d45;
-    --border2: #243352;
-    --accent: #00d4ff;
-    --accent2: #0099cc;
-    --accent3: #00ff88;
-    --accent4: #ff6b35;
-    --text: #e8f0fe;
-    --text2: #94a3c4;
-    --text3: #5a6d8a;
-    --danger: #ff4757;
-    --warn: #ffa726;
-    --success: #00e676;
-    --glow: 0 0 20px rgba(0,212,255,0.15);
-    --glow2: 0 0 40px rgba(0,212,255,0.08);
+    --primary: #fb861d;
+    --primary-dark: #e0720f;
+    --primary-light: #fff3e8;
+    --primary-glow: rgba(251,134,29,0.15);
+    --white: #ffffff;
+    --bg: #f8f9fb;
+    --card: #ffffff;
+    --border: #f0f0f4;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --text-light: #9ca3af;
+    --success: #10b981;
+    --danger: #ef4444;
+    --info: #3b82f6;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 40px rgba(251,134,29,0.12), 0 4px 16px rgba(0,0,0,0.06);
+    --radius: 16px;
+    --radius-sm: 10px;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    overflow-x: hidden;
-  }
-  /* BACKGROUND EFFECT */
-  body::before {
-    content:'';
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,212,255,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(0,153,204,0.03) 0%, transparent 70%);
-    pointer-events:none;
-    z-index:0;
   }
 
-  /* ====== HEADER ====== */
-  .header {
-    background: linear-gradient(135deg, #0d1426 0%, #111827 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+  /* ── NAV ── */
+  nav {
+    background: var(--white);
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-sm);
   }
-  .header-inner {
-    max-width: 1400px;
+  .nav-inner {
+    max-width: 1280px;
     margin: 0 auto;
+    padding: 0 20px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
-    gap: 16px;
   }
-  .logo {
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; font-size: 1.1rem; color: var(--text);
+  }
+  .nav-logo span {
+    background: var(--primary);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .nav-tabs {
+    display: flex; gap: 4px;
+  }
+  .tab-btn {
+    padding: 8px 18px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #ff6b00 100%);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    color: #fff;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; right: -40px; top: -40px;
+    width: 240px; height: 240px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; right: 60px; bottom: -60px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .hero h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .hero p { opacity: .85; font-size: .95rem; }
+  .hero-date {
+    margin-top: 16px;
+    font-weight: 700;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.2);
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 8px;
+  }
+
+  /* ── SECTION CARD ── */
+  .section-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+  }
+  .section-card:hover { box-shadow: var(--shadow); }
+
+  .section-header {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 18px 24px;
+    background: var(--primary-light);
+    border-bottom: 1px solid rgba(251,134,29,0.15);
   }
-  .logo-icon {
-    width: 40px; height: 40px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  .section-icon {
+    width: 38px; height: 38px;
+    background: var(--primary);
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    box-shadow: 0 0 16px rgba(0,212,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: #fff;
     flex-shrink: 0;
   }
-  .logo-text { line-height: 1.2; }
-  .logo-title { font-size: 15px; font-weight: 700; color: var(--text); }
-  .logo-sub { font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
-  .header-nav { display: flex; gap: 8px; }
-  .nav-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text2);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-    white-space: nowrap;
-  }
-  .nav-btn:hover, .nav-btn.active {
-    background: var(--card2);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .nav-btn.active {
-    box-shadow: 0 0 12px rgba(0,212,255,0.2);
-  }
-
-  /* ====== TABS ====== */
-  .page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
-  .page.active { display: block; }
-
-  /* ====== DASHBOARD ====== */
-  .dash-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .dash-title { font-size: 26px; font-weight: 800; }
-  .dash-title span { color: var(--accent); }
-  .dash-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
-  .refresh-btn {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none;
-    border-radius: 8px;
-    color: #000;
+  .section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
     font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    white-space: nowrap;
+    color: var(--text);
   }
-  .refresh-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,212,255,0.4); }
+  .section-subtitle { font-size: .8rem; color: var(--text-muted); }
+  .section-body { padding: 24px; }
 
-  /* STATS ROW */
-  .stats-grid {
+  /* ── FORM ── */
+  .form-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
-  .stat-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.2s;
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
   }
-  .stat-card::before {
-    content:'';
-    position: absolute;
-    top:0; left:0; right:0;
-    height: 3px;
-    border-radius: 14px 14px 0 0;
+  .form-group input, .form-group select {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color .2s, box-shadow .2s;
+    -webkit-appearance: none;
   }
-  .stat-card.blue::before { background: var(--accent); }
-  .stat-card.green::before { background: var(--accent3); }
-  .stat-card.orange::before { background: var(--accent4); }
-  .stat-card.purple::before { background: #b388ff; }
-  .stat-card.teal::before { background: #4dd0e1; }
-  .stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 8px; }
-  .stat-value { font-size: 32px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-  .stat-card.blue .stat-value { color: var(--accent); }
-  .stat-card.green .stat-value { color: var(--accent3); }
-  .stat-card.orange .stat-value { color: var(--accent4); }
-  .stat-card.purple .stat-value { color: #b388ff; }
-  .stat-card.teal .stat-value { color: #4dd0e1; }
-  .stat-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 32px; opacity: 0.12; }
+  .form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+    background: #fff;
+  }
+  .form-group input[type="date"] { cursor: pointer; }
 
-  /* DASHBOARD CARDS */
+  .full-row { grid-column: 1 / -1; }
+
+  /* Patient distribution block */
+  .dist-block {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .dist-label {
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dist-label::before {
+    content: '';
+    width: 3px; height: 14px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  .dist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+  }
+
+  /* Dynamic rows */
+  .dynamic-row {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 10px;
+  }
+  .dynamic-row input { flex: 1; }
+  .btn-remove {
+    width: 34px; height: 34px;
+    border: 1.5px solid #fca5a5;
+    background: #fff5f5;
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; flex-shrink: 0;
+  }
+  .btn-remove:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+
+  .btn-add {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px;
+    background: var(--primary-light);
+    border: 1.5px dashed var(--primary);
+    border-radius: var(--radius-sm);
+    color: var(--primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 4px;
+  }
+  .btn-add:hover { background: var(--primary); color: #fff; border-style: solid; }
+
+  /* ── INDICATOR TABLE ── */
+  .indicator-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .875rem;
+  }
+  .indicator-table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .indicator-table th:first-child { border-radius: 10px 0 0 0; }
+  .indicator-table th:last-child { border-radius: 0 10px 0 0; }
+  .indicator-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .indicator-table tr:last-child td { border-bottom: none; }
+  .indicator-table tr:nth-child(even) td { background: var(--bg); }
+  .indicator-table tr:hover td { background: var(--primary-light); }
+  .indicator-table input {
+    width: 90px;
+    padding: 6px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .875rem;
+    background: var(--white);
+    text-align: center;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .indicator-table input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: .75rem;
+    font-weight: 600;
+  }
+  .badge-orange { background: var(--primary-light); color: var(--primary); }
+  .badge-green { background: #d1fae5; color: #059669; }
+  .badge-red { background: #fee2e2; color: #dc2626; }
+
+  /* ── REKAP ── */
+  .rekap-box {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--primary-light), #fff8f0);
+    border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(251,134,29,0.2);
+  }
+  .rekap-stat {
+    text-align: center;
+    flex: 1; min-width: 100px;
+  }
+  .rekap-stat .num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+  }
+  .rekap-stat .lbl {
+    font-size: .78rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .rekap-divider { width: 1px; height: 48px; background: rgba(251,134,29,.25); }
+
+  /* ── ACTIONS ── */
+  .action-bar {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 32px; margin-bottom: 16px;
+  }
+  .btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(251,134,29,0.35);
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(251,134,29,0.45); }
+  .btn-wa {
+    background: #25D366;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+  }
+  .btn-wa:hover { background: #128C7E; transform: translateY(-1px); }
+  .btn-outline {
+    background: var(--white);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--text);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: .875rem;
+    font-weight: 500;
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s cubic-bezier(.34,1.56,.64,1);
+    max-width: 320px;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+  #toast.success { background: #059669; }
+  #toast.error { background: #dc2626; }
+
+  /* ── DASHBOARD ── */
   .dash-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
   }
   .dash-card {
     background: var(--card);
+    border-radius: var(--radius);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
     overflow: hidden;
+    transition: all .25s;
   }
-  .dash-card-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .dash-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .dash-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 0 0 var(--radius) var(--radius);
   }
-  .dash-card-title {
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text2);
-  }
-  .badge {
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .badge-blue { background: rgba(0,212,255,0.15); color: var(--accent); }
-  .badge-green { background: rgba(0,255,136,0.15); color: var(--accent3); }
-  .badge-orange { background: rgba(255,107,53,0.15); color: var(--accent4); }
-  .dash-card-body { padding: 16px 20px; }
-  .report-list { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
-  .report-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    background: var(--bg2);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .report-item:hover { border-color: var(--accent); background: var(--card2); }
-  .report-item-date { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); min-width: 80px; }
-  .report-item-info { flex: 1; min-width: 0; }
-  .report-item-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .report-item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  .report-item-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
-  .empty-state .icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
-  .empty-state p { font-size: 13px; }
-
-  /* MUTU TABLE */
-  .mutu-summary { display: flex; flex-direction: column; gap: 6px; }
-  .mutu-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
-  .mutu-row:last-child { border-bottom: none; }
-  .mutu-no { font-size: 11px; color: var(--text3); min-width: 20px; }
-  .mutu-name { flex: 1; font-size: 12px; color: var(--text2); }
-  .mutu-val { font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-  .mutu-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .status-ok { background: var(--success); }
-  .status-warn { background: var(--warn); }
-  .status-na { background: var(--text3); }
-
-  /* ====== FORM PAGE ====== */
-  .form-header { margin-bottom: 28px; }
-  .form-title { font-size: 24px; font-weight: 800; }
-  .form-title span { color: var(--accent); }
-  .form-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
-
-  .section-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
-  .section-head {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--bg2);
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s;
-  }
-  .section-head:hover { background: var(--card2); }
-  .section-icon {
-    width: 34px; height: 34px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .icon-blue { background: rgba(0,212,255,0.15); }
-  .icon-green { background: rgba(0,255,136,0.15); }
-  .icon-orange { background: rgba(255,107,53,0.15); }
-  .icon-purple { background: rgba(179,136,255,0.15); }
-  .icon-teal { background: rgba(77,208,225,0.15); }
-  .icon-pink { background: rgba(255,80,120,0.15); }
-  .section-title { font-size: 14px; font-weight: 700; flex: 1; }
-  .toggle-icon { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
-  .section-body { padding: 20px; }
-  .section-body.collapsed { display: none; }
-
-  /* FORM ELEMENTS */
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-  .field-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
-  .field-row.cols4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-  .field-row.full { grid-template-columns: 1fr; }
-  @media(max-width: 640px) {
-    .field-row, .field-row.cols3, .field-row.cols4 { grid-template-columns: 1fr; }
-  }
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field label { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: 0.3px; }
-  .field input, .field select, .field textarea {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 13px;
-    padding: 9px 12px;
-    outline: none;
-    transition: all 0.2s;
-    width: 100%;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
-    background: var(--card2);
-  }
-  .field select option { background: var(--card); }
-  .field textarea { resize: vertical; min-height: 80px; }
-
-  /* DISTRIBUSI BLOCK */
-  .dist-block {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
+  .dash-card .card-icon {
+    width: 44px; height: 44px;
+    background: var(--primary-light);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
     margin-bottom: 14px;
   }
-  .dist-title { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .dist-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dist-row:last-child { margin-bottom: 0; }
-  .dist-label { font-size: 12px; color: var(--text2); min-width: 50px; }
-  .dist-inputs { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
-  .dist-field { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 70px; }
-  .dist-field span { font-size: 10px; color: var(--text3); }
-  .dist-field input {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    padding: 6px 10px;
-    outline: none;
-    width: 100%;
-    text-align: center;
-    transition: all 0.2s;
+  .dash-card .card-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
   }
-  .dist-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,212,255,0.1); }
-  .dist-total { font-size: 13px; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; min-width: 30px; text-align: right; }
+  .dash-card .card-label {
+    font-size: .8rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 500;
+  }
 
-  /* DYNAMIC TABLE */
-  .dyn-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
-  .dyn-table th {
-    text-align: left;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text3);
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .dyn-table td { padding: 6px 12px; border-bottom: 1px solid rgba(30,45,69,0.5); }
-  .dyn-table td input, .dyn-table td select {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 13px;
-    padding: 6px 10px;
-    outline: none;
+  /* History table */
+  .history-table {
     width: 100%;
-    transition: all 0.2s;
+    border-collapse: collapse;
+    font-size: .875rem;
   }
-  .dyn-table td input:focus, .dyn-table td select:focus {
-    border-color: var(--accent);
-  }
-  .dyn-table .del-btn {
-    background: rgba(255,71,87,0.15);
-    border: 1px solid rgba(255,71,87,0.2);
-    color: var(--danger);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .dyn-table .del-btn:hover { background: rgba(255,71,87,0.3); }
-  .add-row-btn {
-    background: rgba(0,212,255,0.1);
-    border: 1px dashed rgba(0,212,255,0.3);
-    color: var(--accent);
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    width: 100%;
-    margin-top: 4px;
-  }
-  .add-row-btn:hover { background: rgba(0,212,255,0.15); border-style: solid; }
-
-  /* MUTU TABLE FORM */
-  .mutu-table { width: 100%; border-collapse: collapse; }
-  .mutu-table th {
-    text-align: left;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text3);
-    padding: 10px 12px;
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-  }
-  .mutu-table th:last-child { text-align: center; }
-  .mutu-table td {
-    padding: 7px 12px;
-    border-bottom: 1px solid rgba(30,45,69,0.6);
-    font-size: 12px;
-  }
-  .mutu-table tr:last-child td { border-bottom: none; }
-  .mutu-table tr:hover td { background: rgba(0,212,255,0.03); }
-  .mutu-table .no-col { color: var(--text3); width: 32px; }
-  .mutu-table .ind-col { color: var(--text2); }
-  .mutu-table .target-col { color: var(--warn); font-family: 'JetBrains Mono', monospace; font-weight: 600; width: 90px; }
-  .mutu-table .cap-col { width: 100px; }
-  .mutu-table .cap-col input {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    padding: 5px 8px;
-    outline: none;
-    width: 100%;
-    text-align: center;
-    transition: border-color 0.2s;
-  }
-  .mutu-table .cap-col input:focus { border-color: var(--accent); }
-
-  /* PEMBUAT SECTION */
-  .pembuat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-  .pembuat-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .pembuat-item:hover { border-color: var(--accent2); }
-  .pembuat-item input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
-  .pembuat-item label { font-size: 12px; cursor: pointer; line-height: 1.3; }
-  .pembuat-item label strong { display: block; color: var(--text); font-weight: 600; font-size: 13px; }
-  .pembuat-item label span { color: var(--text3); font-size: 11px; }
-  .pembuat-item.selected { border-color: var(--accent); background: rgba(0,212,255,0.07); }
-
-  /* SUBMIT */
-  .submit-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-    flex-wrap: wrap;
-  }
-  .btn-submit {
-    flex: 1;
-    min-width: 140px;
-    padding: 14px 24px;
-    border-radius: 10px;
-    border: none;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .btn-save {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #000;
-  }
-  .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,212,255,0.35); }
-  .btn-wa {
-    background: linear-gradient(135deg, #25d366, #128c7e);
+  .history-table th {
+    background: var(--text);
     color: #fff;
-  }
-  .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
-  .btn-reset {
-    background: transparent;
-    color: var(--danger);
-    border: 1px solid rgba(255,71,87,0.3);
-  }
-  .btn-reset:hover { background: rgba(255,71,87,0.1); }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    top: 80px;
-    right: 24px;
-    background: var(--card2);
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-size: 13px;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
     font-weight: 600;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    transform: translateX(40px);
-    transition: all 0.3s;
-    max-width: 320px;
-    pointer-events: none;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   }
-  .toast.show { opacity: 1; transform: translateX(0); }
-  .toast.success { border-color: var(--success); }
-  .toast.error { border-color: var(--danger); }
-  .toast-icon { font-size: 18px; }
+  .history-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-table tr:hover td { background: var(--primary-light); }
+  .history-table .btn-detail {
+    padding: 5px 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 7px;
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .history-table .btn-detail:hover { background: var(--primary); color: #fff; }
 
-  /* LOADING */
-  .loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10,15,30,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .loading-overlay.show { opacity: 1; pointer-events: all; }
-  .spinner {
-    width: 48px; height: 48px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
+  /* ── LOADING ── */
+  .loader {
+    display: inline-block; width: 18px; height: 18px;
+    border: 2.5px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: spin .6s linear infinite;
+    vertical-align: middle;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 200;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 16px;
+    overflow-y: auto;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+  }
+  .modal h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .modal pre {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-size: .8rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .modal-close {
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: var(--border);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+  }
 
-  /* REKAP SECTION */
-  .rekap-box {
-    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,255,136,0.05));
-    border: 1px solid rgba(0,212,255,0.2);
-    border-radius: 12px;
-    padding: 16px 20px;
+  /* ── DATE INPUT HEADER ── */
+  .date-input-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
   }
-  .rekap-item { display: flex; flex-direction: column; gap: 4px; }
-  .rekap-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
-  .rekap-val { font-size: 22px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
-  .rekap-divider { width: 1px; height: 40px; background: var(--border); }
+  .date-input-card label {
+    font-weight: 700;
+    font-size: .9rem;
+    white-space: nowrap;
+  }
+  .date-input-card input[type="date"] {
+    padding: 10px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    color: var(--text);
+    cursor: pointer;
+    background: var(--bg);
+  }
+  .date-input-card input[type="date"]:focus {
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+  }
 
-  /* RESPONSIVE HEADER */
-  @media(max-width: 480px) {
-    .header-nav { gap: 4px; }
-    .nav-btn { padding: 6px 10px; font-size: 12px; }
-    .page { padding: 16px; }
-    .logo-title { font-size: 13px; }
+  /* Nama & Gelar */
+  .nama-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .nav-tabs .tab-btn { padding: 7px 12px; font-size: .8rem; }
+    .container { padding: 20px 14px; }
+    .hero { padding: 24px 20px; }
+    .section-body { padding: 16px; }
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+    .rekap-divider { display: none; }
+    .action-bar { flex-direction: column; }
+    .btn { justify-content: center; }
+    .nama-row { grid-template-columns: 1fr; }
+    .indicator-table { font-size: .78rem; }
+    .indicator-table th, .indicator-table td { padding: 8px 10px; }
   }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"></div>
-</div>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <span>☢️ RAD</span>
+      Laporan Radiologi
+    </div>
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="showPage('form')">📋 Form</button>
+      <button class="tab-btn" onclick="showPage('dashboard')">📊 Dashboard</button>
+    </div>
+  </div>
+</nav>
 
 <!-- TOAST -->
-<div class="toast" id="toast">
-  <span class="toast-icon" id="toastIcon">✅</span>
-  <span id="toastMsg">Berhasil disimpan!</span>
-</div>
+<div id="toast"></div>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-icon">🏥</div>
-      <div class="logo-text">
-        <div class="logo-title">Radiologi Daily Report</div>
-        <div class="logo-sub">Radiologi RS Mitra Plumbon / Develop By Ino </div>
+<!-- ═══════════════ PAGE: FORM ═══════════════ -->
+<div id="page-form" class="page active">
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>📋 Laporan Harian Radiologi</h1>
+    <p>Instalasi Radiologi — RS Cirebon</p>
+    <div class="hero-date" id="heroDate">—</div>
+  </div>
+
+  <!-- Date & Nama -->
+  <div class="date-input-card">
+    <label>📅 Hari/Tanggal:</label>
+    <input type="date" id="tglInput" onchange="updateDate()">
+    <div class="nama-row" style="flex:1;">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="namaInput" placeholder="dr. Nama Lengkap...">
+      </div>
+      <div class="form-group">
+        <label>Gelar / Jabatan</label>
+        <input type="text" id="gelarInput" placeholder="Sp.Rad, MARS...">
       </div>
     </div>
-    <nav class="header-nav">
-      <button class="nav-btn active" onclick="showPage('form')">📋 Input Laporan</button>
-      <button class="nav-btn" onclick="showPage('dashboard')">📊 Dashboard</button>
-    </nav>
-  </div>
-</header>
-
-<!-- =================== FORM PAGE =================== -->
-<div class="page active" id="page-form">
-  <div class="form-header">
-    <div class="form-title">Input <span>Laporan Harian</span></div>
-    <div class="form-sub">Isi data pemeriksaan radiologi hari ini</div>
   </div>
 
   <!-- A. RONTGEN -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-blue">🔬</div>
-      <div class="section-title">A. Pemeriksaan Rontgen</div>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="section-body" id="sec-rontgen">
-      <div class="field-row">
-        <div class="field">
-          <label>Hari / Tanggal</label>
-          <input type="date" id="tanggal">
-        </div>
-        <div class="field">
-          <label>Jumlah Total Rontgen</label>
-          <input type="number" id="rontgen_total" placeholder="0" min="0" oninput="updateRontgenTotal()">
-        </div>
+    <div class="section-header">
+      <div class="section-icon">🩻</div>
+      <div>
+        <div class="section-title">A. Pemeriksaan Rontgen</div>
+        <div class="section-subtitle">X-Ray konvensional</div>
       </div>
-      <div class="field-row cols4">
-        <div class="field">
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Jumlah Total</label>
+          <input type="number" id="rntg_total" min="0" placeholder="0" oninput="calcRontgenTotal()">
+        </div>
+        <div class="form-group">
           <label>P4</label>
-          <input type="number" id="rontgen_p4" placeholder="0" min="0" oninput="updateRontgenTotal()">
+          <input type="number" id="rntg_p4" min="0" placeholder="0" oninput="calcRontgenTotal()">
         </div>
-        <div class="field">
+        <div class="form-group">
           <label>P3</label>
-          <input type="number" id="rontgen_p3" placeholder="0" min="0" oninput="updateRontgenTotal()">
+          <input type="number" id="rntg_p3" min="0" placeholder="0" oninput="calcRontgenTotal()">
         </div>
-        <div class="field">
+        <div class="form-group">
           <label>Asuransi</label>
-          <input type="number" id="rontgen_ass" placeholder="0" min="0" oninput="updateRontgenTotal()">
+          <input type="number" id="rntg_ass" min="0" placeholder="0" oninput="calcRontgenTotal()">
         </div>
-        <div class="field">
+        <div class="form-group">
           <label>MCU</label>
-          <input type="number" id="rontgen_mcu" placeholder="0" min="0" oninput="updateRontgenTotal()">
+          <input type="number" id="rntg_mcu" min="0" placeholder="0" oninput="calcRontgenTotal()">
         </div>
       </div>
     </div>
@@ -675,128 +694,211 @@
 
   <!-- B. CT SCAN -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-green">💊</div>
-      <div class="section-title">B. CT Scan</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">🔬</div>
+      <div>
+        <div class="section-title">B. CT Scan</div>
+        <div class="section-subtitle">Computed Tomography</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-ct">
-      <div class="field-row full">
-        <div class="field">
-          <label>Jumlah Pemeriksaan CT Scan</label>
-          <input type="number" id="ct_total" placeholder="0" min="0" readonly style="color:var(--accent);font-weight:700;">
+    <div class="section-body">
+      <div class="form-row" style="max-width:200px">
+        <div class="form-group">
+          <label>Jumlah Total</label>
+          <input type="number" id="ct_total" min="0" placeholder="0" oninput="autoCalcDist('ct')">
         </div>
       </div>
-      <div class="dist-block">
-        <div class="dist-title">Distribusi Pasien CT Scan</div>
-        <div id="ct-dist">
-          <!-- generated by JS -->
+      <!-- Distribution -->
+      <div id="ct_dist">
+        <div class="dist-block">
+          <div class="dist-label">Klinik</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="ct_kl" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="ct_kl_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="ct_kl_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="ct_kl_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">Ranap</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="ct_rn" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="ct_rn_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="ct_rn_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="ct_rn_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">IGD</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="ct_igd" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="ct_igd_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="ct_igd_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="ct_igd_ass" min="0" placeholder="0"></div>
+          </div>
         </div>
       </div>
-      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text2);">Rincian Jenis Pemeriksaan CT Scan</div>
-      <table class="dyn-table">
-        <thead><tr><th>Jenis Pemeriksaan</th><th>Jumlah</th><th></th></tr></thead>
-        <tbody id="ct-jenis-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addJenis('ct-jenis-body')">+ Tambah Jenis Pemeriksaan</button>
+      <div style="font-weight:700;font-size:.85rem;color:var(--text);margin:20px 0 10px;">Rincian Jenis Pemeriksaan CT</div>
+      <div id="ct_types"></div>
+      <button class="btn-add" onclick="addTypeRow('ct')">➕ Tambah Jenis</button>
     </div>
   </div>
 
   <!-- C. MRI -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-purple">🧲</div>
-      <div class="section-title">C. MRI</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">🧲</div>
+      <div>
+        <div class="section-title">C. MRI</div>
+        <div class="section-subtitle">Magnetic Resonance Imaging</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-mri">
-      <div class="field-row full">
-        <div class="field">
-          <label>Jumlah Pemeriksaan MRI</label>
-          <input type="number" id="mri_total" placeholder="0" min="0" readonly style="color:var(--accent);font-weight:700;">
+    <div class="section-body">
+      <div class="form-row" style="max-width:200px">
+        <div class="form-group">
+          <label>Jumlah Total</label>
+          <input type="number" id="mri_total" min="0" placeholder="0">
         </div>
       </div>
-      <div class="dist-block">
-        <div class="dist-title">Distribusi Pasien MRI</div>
-        <div id="mri-dist"></div>
+      <div id="mri_dist">
+        <div class="dist-block">
+          <div class="dist-label">Klinik</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_kl" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="mri_kl_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="mri_kl_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_kl_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">Ranap</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_rn" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="mri_rn_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="mri_rn_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_rn_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">IGD</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_igd" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="mri_igd_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="mri_igd_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_igd_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">Luar</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_lr" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="mri_lr_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="mri_lr_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_lr_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
       </div>
-      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text2);">Rincian Jenis Pemeriksaan MRI</div>
-      <table class="dyn-table">
-        <thead><tr><th>Jenis Pemeriksaan</th><th>Jumlah</th><th></th></tr></thead>
-        <tbody id="mri-jenis-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addJenis('mri-jenis-body')">+ Tambah Jenis Pemeriksaan</button>
+      <div style="font-weight:700;font-size:.85rem;color:var(--text);margin:20px 0 10px;">Rincian Jenis Pemeriksaan MRI</div>
+      <div id="mri_types"></div>
+      <button class="btn-add" onclick="addTypeRow('mri')">➕ Tambah Jenis</button>
     </div>
   </div>
 
   <!-- D. USG -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-teal">🔊</div>
-      <div class="section-title">D. USG</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">📡</div>
+      <div>
+        <div class="section-title">D. USG</div>
+        <div class="section-subtitle">Ultrasonografi</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-usg">
-      <div class="field-row full">
-        <div class="field">
-          <label>Jumlah Pemeriksaan USG</label>
-          <input type="number" id="usg_total" placeholder="0" min="0" readonly style="color:var(--accent);font-weight:700;">
+    <div class="section-body">
+      <div class="form-row" style="max-width:200px">
+        <div class="form-group">
+          <label>Jumlah Total</label>
+          <input type="number" id="usg_total" min="0" placeholder="0">
         </div>
       </div>
-      <div class="dist-block">
-        <div class="dist-title">Distribusi Pasien USG</div>
-        <div id="usg-dist"></div>
+      <div id="usg_dist">
+        <div class="dist-block">
+          <div class="dist-label">Klinik</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_kl" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="usg_kl_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="usg_kl_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_kl_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">Ranap</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_rn" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="usg_rn_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="usg_rn_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_rn_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">IGD</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_igd" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="usg_igd_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="usg_igd_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_igd_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
+        <div class="dist-block">
+          <div class="dist-label">Luar</div>
+          <div class="dist-grid">
+            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_lr" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P4</label><input type="number" id="usg_lr_p4" min="0" placeholder="0"></div>
+            <div class="form-group"><label>P3</label><input type="number" id="usg_lr_p3" min="0" placeholder="0"></div>
+            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_lr_ass" min="0" placeholder="0"></div>
+          </div>
+        </div>
       </div>
-      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text2);">Rincian Jenis Pemeriksaan USG</div>
-      <table class="dyn-table">
-        <thead><tr><th>Jenis Pemeriksaan</th><th>Jumlah</th><th></th></tr></thead>
-        <tbody id="usg-jenis-body"></tbody>
-      </table>
+      <div style="font-weight:700;font-size:.85rem;color:var(--text);margin:20px 0 10px;">Rincian Jenis Pemeriksaan USG</div>
+      <div id="usg_types"></div>
+      <button class="btn-add" onclick="addTypeRow('usg')">➕ Tambah Jenis</button>
     </div>
   </div>
 
   <!-- E. PEMERIKSAAN LAIN -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-orange">⚡</div>
-      <div class="section-title">E. Pemeriksaan Lain</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">⚕️</div>
+      <div>
+        <div class="section-title">E. Pemeriksaan Lain</div>
+        <div class="section-subtitle">Panoramic, C-Arm, Cathlab</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-lain">
-      <!-- Panoramic -->
+    <div class="section-body">
       <div class="dist-block">
-        <div class="dist-title">Panoramic</div>
-        <div class="dist-row">
-          <div class="dist-inputs">
-            <div class="dist-field"><span>P4</span><input type="number" id="pan_p4" placeholder="0" min="0" oninput="calcLain('pan')"></div>
-            <div class="dist-field"><span>P3</span><input type="number" id="pan_p3" placeholder="0" min="0" oninput="calcLain('pan')"></div>
-            <div class="dist-field"><span>Asuransi</span><input type="number" id="pan_ass" placeholder="0" min="0" oninput="calcLain('pan')"></div>
-            <div class="dist-field"><span>Total</span><input type="number" id="pan_total" readonly style="color:var(--accent);font-weight:700;"></div>
-          </div>
+        <div class="dist-label">Panoramic</div>
+        <div class="dist-grid">
+          <div class="form-group"><label>Jumlah</label><input type="number" id="pan_total" min="0" placeholder="0"></div>
+          <div class="form-group"><label>P4</label><input type="number" id="pan_p4" min="0" placeholder="0"></div>
+          <div class="form-group"><label>P3</label><input type="number" id="pan_p3" min="0" placeholder="0"></div>
+          <div class="form-group"><label>Asuransi</label><input type="number" id="pan_ass" min="0" placeholder="0"></div>
         </div>
       </div>
-      <!-- C-Arm -->
       <div class="dist-block">
-        <div class="dist-title">C-Arm</div>
-        <div class="dist-row">
-          <div class="dist-inputs">
-            <div class="dist-field"><span>P4</span><input type="number" id="carm_p4" placeholder="0" min="0" oninput="calcLain('carm')"></div>
-            <div class="dist-field"><span>P3</span><input type="number" id="carm_p3" placeholder="0" min="0" oninput="calcLain('carm')"></div>
-            <div class="dist-field"><span>Asuransi</span><input type="number" id="carm_ass" placeholder="0" min="0" oninput="calcLain('carm')"></div>
-            <div class="dist-field"><span>Total</span><input type="number" id="carm_total" readonly style="color:var(--accent);font-weight:700;"></div>
-          </div>
+        <div class="dist-label">C-Arm</div>
+        <div class="dist-grid">
+          <div class="form-group"><label>Jumlah</label><input type="number" id="carm_total" min="0" placeholder="0"></div>
+          <div class="form-group"><label>P4</label><input type="number" id="carm_p4" min="0" placeholder="0"></div>
+          <div class="form-group"><label>P3</label><input type="number" id="carm_p3" min="0" placeholder="0"></div>
+          <div class="form-group"><label>Asuransi</label><input type="number" id="carm_ass" min="0" placeholder="0"></div>
         </div>
       </div>
-      <!-- Cathlab -->
       <div class="dist-block">
-        <div class="dist-title">Cathlab</div>
-        <div class="dist-row">
-          <div class="dist-inputs">
-            <div class="dist-field"><span>P4</span><input type="number" id="cath_p4" placeholder="0" min="0" oninput="calcLain('cath')"></div>
-            <div class="dist-field"><span>P3</span><input type="number" id="cath_p3" placeholder="0" min="0" oninput="calcLain('cath')"></div>
-            <div class="dist-field"><span>Asuransi</span><input type="number" id="cath_ass" placeholder="0" min="0" oninput="calcLain('cath')"></div>
-            <div class="dist-field"><span>Total</span><input type="number" id="cath_total" readonly style="color:var(--accent);font-weight:700;"></div>
-          </div>
+        <div class="dist-label">Cathlab</div>
+        <div class="dist-grid">
+          <div class="form-group"><label>Jumlah</label><input type="number" id="cath_total" min="0" placeholder="0"></div>
+          <div class="form-group"><label>P4</label><input type="number" id="cath_p4" min="0" placeholder="0"></div>
+          <div class="form-group"><label>P3</label><input type="number" id="cath_p3" min="0" placeholder="0"></div>
+          <div class="form-group"><label>Asuransi</label><input type="number" id="cath_ass" min="0" placeholder="0"></div>
         </div>
       </div>
     </div>
@@ -804,20 +906,22 @@
 
   <!-- F. PELAYANAN KHUSUS -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-pink">🌙</div>
-      <div class="section-title">F. Pelayanan Khusus</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">🌙</div>
+      <div>
+        <div class="section-title">F. Pelayanan Khusus</div>
+        <div class="section-subtitle">Laporan malam & order IGD</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-khusus">
-      <div class="field-row">
-        <div class="field">
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
           <label>Laporan Malam (21.00–07.00)</label>
-          <input type="number" id="lap_malam" placeholder="0" min="0"> 
+          <input type="number" id="lap_malam" min="0" placeholder="0">
         </div>
-        <div class="field">
+        <div class="form-group">
           <label>Order IGD Tidak Terkirim</label>
-          <input type="number" id="order_igd" placeholder="0" min="0">
+          <input type="number" id="order_igd" min="0" placeholder="0">
         </div>
       </div>
     </div>
@@ -825,23 +929,26 @@
 
   <!-- G. INDIKATOR MUTU -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-green">📈</div>
-      <div class="section-title">G. Indikator Mutu Radiologi</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">📈</div>
+      <div>
+        <div class="section-title">G. Indikator Mutu Radiologi</div>
+        <div class="section-subtitle">26 indikator mutu pelayanan</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-mutu">
+    <div class="section-body">
       <div style="overflow-x:auto;">
-        <table class="mutu-table" id="mutu-table">
+        <table class="indicator-table">
           <thead>
             <tr>
-              <th class="no-col">No</th>
+              <th>No</th>
               <th>Indikator</th>
-              <th class="target-col">Target</th>
-              <th class="cap-col" style="text-align:center;">Capaian</th>
+              <th>Target</th>
+              <th>Capaian</th>
+              <th>Satuan</th>
             </tr>
           </thead>
-          <tbody id="mutu-body"></tbody>
+          <tbody id="indicatorBody"></tbody>
         </table>
       </div>
     </div>
@@ -849,131 +956,148 @@
 
   <!-- H. REKAP -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-blue">📊</div>
-      <div class="section-title">H. Rekap Indikator</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div>
+        <div class="section-title">H. Rekap Indikator</div>
+        <div class="section-subtitle">Otomatis dihitung</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-rekap">
+    <div class="section-body">
       <div class="rekap-box">
-        <div class="rekap-item">
-          <div class="rekap-lbl">Indikator Tercapai</div>
-          <div class="rekap-val" id="rekap-tercapai">—</div>
+        <div class="rekap-stat">
+          <div class="num" id="rekap_tercapai">—</div>
+          <div class="lbl">Tercapai</div>
         </div>
         <div class="rekap-divider"></div>
-        <div class="rekap-item">
-          <div class="rekap-lbl">Total Indikator</div>
-          <div class="rekap-val" style="color:var(--text2);">26</div>
+        <div class="rekap-stat">
+          <div class="num">26</div>
+          <div class="lbl">Total Indikator</div>
         </div>
         <div class="rekap-divider"></div>
-        <div class="rekap-item">
-          <div class="rekap-lbl">Persentase Capaian</div>
-          <div class="rekap-val" id="rekap-pct">—</div>
-        </div>
-        <div class="rekap-divider"></div>
-        <div class="rekap-item">
-          <div class="rekap-lbl">Keterlambatan Karyawan</div>
-          <input type="number" id="keterlambatan" placeholder="0" min="0" style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;padding:4px 10px;width:90px;outline:none;text-align:center;">
+        <div class="rekap-stat">
+          <div class="num" id="rekap_persen">—</div>
+          <div class="lbl">% Capaian</div>
         </div>
       </div>
-      <button class="add-row-btn" onclick="hitungRekap()" style="margin-top:12px;">🔄 Hitung Rekap Otomatis</button>
+      <div style="margin-top:16px;">
+        <div class="form-group" style="max-width:320px;">
+          <label>I. Keterlambatan Karyawan</label>
+          <input type="text" id="terlambat" placeholder="Nama / jumlah...">
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- I. DIBUAT OLEH -->
+  <!-- ACTIONS -->
+  <div class="action-bar">
+    <button class="btn btn-primary" onclick="simpanLaporan()">
+      💾 Simpan ke Firebase
+    </button>
+    <button class="btn btn-wa" onclick="kirimWA()">
+      📲 Kirim WhatsApp
+    </button>
+    <button class="btn btn-outline" onclick="resetForm()">
+      🔄 Reset Form
+    </button>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /page-form -->
+
+<!-- ═══════════════ PAGE: DASHBOARD ═══════════════ -->
+<div id="page-dashboard" class="page">
+<div class="container">
+
+  <div class="hero">
+    <h1>📊 Dashboard Radiologi</h1>
+    <p>Ringkasan & Riwayat Laporan Harian</p>
+    <div class="hero-date" id="dashDate">—</div>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="dash-grid" id="dashCards">
+    <div class="dash-card">
+      <div class="card-icon">📁</div>
+      <div class="card-num" id="d_total_laporan">—</div>
+      <div class="card-label">Total Laporan Tersimpan</div>
+    </div>
+    <div class="dash-card">
+      <div class="card-icon">🩻</div>
+      <div class="card-num" id="d_avg_rontgen">—</div>
+      <div class="card-label">Rata-rata Rontgen/Hari</div>
+    </div>
+    <div class="dash-card">
+      <div class="card-icon">🔬</div>
+      <div class="card-num" id="d_avg_ct">—</div>
+      <div class="card-label">Rata-rata CT Scan/Hari</div>
+    </div>
+    <div class="dash-card">
+      <div class="card-icon">🧲</div>
+      <div class="card-num" id="d_avg_mri">—</div>
+      <div class="card-label">Rata-rata MRI/Hari</div>
+    </div>
+    <div class="dash-card">
+      <div class="card-icon">📡</div>
+      <div class="card-num" id="d_avg_usg">—</div>
+      <div class="card-label">Rata-rata USG/Hari</div>
+    </div>
+    <div class="dash-card">
+      <div class="card-icon">📈</div>
+      <div class="card-num" id="d_avg_capaian">—</div>
+      <div class="card-label">Rata-rata Capaian Mutu</div>
+    </div>
+  </div>
+
+  <!-- History -->
   <div class="section-card">
-    <div class="section-head" onclick="toggleSection(this)">
-      <div class="section-icon icon-orange">👤</div>
-      <div class="section-title">I. Dibuat Oleh</div>
-      <span class="toggle-icon">▼</span>
+    <div class="section-header">
+      <div class="section-icon">📂</div>
+      <div>
+        <div class="section-title">Riwayat Laporan</div>
+        <div class="section-subtitle">Semua laporan tersimpan</div>
+      </div>
     </div>
-    <div class="section-body" id="sec-pembuat">
-      <div style="font-size:12px;color:var(--text3);margin-bottom:12px;">Pilih nama petugas yang membuat laporan:</div>
-      <div class="pembuat-grid" id="pembuat-grid"></div>
+    <div class="section-body">
+      <div style="overflow-x:auto;">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Rontgen</th>
+              <th>CT Scan</th>
+              <th>MRI</th>
+              <th>USG</th>
+              <th>Capaian Mutu</th>
+              <th>Dibuat Oleh</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px;">Memuat data...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- SUBMIT -->
-  <div class="submit-row">
-    <button class="btn-submit btn-save" onclick="submitForm()">💾 Simpan ke Database</button>
-    <button class="btn-submit btn-wa" onclick="kirimWA()">📲 Kirim via WhatsApp</button>
-    <button class="btn-submit btn-reset" onclick="resetForm()" style="flex:0;min-width:100px;">🗑 Reset</button>
+  <button class="btn btn-primary" onclick="loadDashboard()" style="margin-top:16px;">🔄 Refresh Data</button>
+</div>
+</div><!-- /page-dashboard -->
+
+<!-- MODAL DETAIL -->
+<div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+  <div class="modal">
+    <h2>📋 Detail Laporan</h2>
+    <pre id="modalContent"></pre>
+    <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('active')">✕ Tutup</button>
   </div>
 </div>
 
-<!-- =================== DASHBOARD PAGE =================== -->
-<div class="page" id="page-dashboard">
-  <div class="dash-header">
-    <div>
-      <div class="dash-title">Dashboard <span>Radiologi</span></div>
-      <div class="dash-sub" id="dash-date">Memuat data...</div>
-    </div>
-    <button class="refresh-btn" onclick="loadDashboard()">🔄 Refresh</button>
-  </div>
-
-  <!-- STAT CARDS -->
-  <div class="stats-grid">
-    <div class="stat-card blue">
-      <div class="stat-label">Total Rontgen</div>
-      <div class="stat-value" id="ds-rontgen">—</div>
-      <div class="stat-icon">🔬</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-label">Total CT Scan</div>
-      <div class="stat-value" id="ds-ct">—</div>
-      <div class="stat-icon">💊</div>
-    </div>
-    <div class="stat-card purple">
-      <div class="stat-label">Total MRI</div>
-      <div class="stat-value" id="ds-mri">—</div>
-      <div class="stat-icon">🧲</div>
-    </div>
-    <div class="stat-card teal">
-      <div class="stat-label">Total USG</div>
-      <div class="stat-value" id="ds-usg">—</div>
-      <div class="stat-icon">🔊</div>
-    </div>
-    <div class="stat-card orange">
-      <div class="stat-label">Capaian Mutu</div>
-      <div class="stat-value" id="ds-mutu">—</div>
-      <div class="stat-icon">📈</div>
-    </div>
-  </div>
-
-  <!-- DASH GRID -->
-  <div class="dash-grid">
-    <!-- Laporan Terbaru -->
-    <div class="dash-card">
-      <div class="dash-card-header">
-        <div class="dash-card-title">📋 Laporan Terbaru</div>
-        <span class="badge badge-blue" id="dash-count">0</span>
-      </div>
-      <div class="dash-card-body">
-        <div class="report-list" id="report-list">
-          <div class="empty-state"><div class="icon">📭</div><p>Belum ada laporan</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Indikator Mutu Terbaru -->
-    <div class="dash-card">
-      <div class="dash-card-header">
-        <div class="dash-card-title">📊 Indikator Mutu Terbaru</div>
-        <span class="badge badge-green" id="dash-mutu-pct">—</span>
-      </div>
-      <div class="dash-card-body">
-        <div id="mutu-summary-list">
-          <div class="empty-state"><div class="icon">📉</div><p>Belum ada data mutu</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FIREBASE + APP SCRIPT -->
+<!-- Firebase + App Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, get, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyADP3wRV5au67aPOC6NFzT7bDQQ7dYLDks",
@@ -988,522 +1112,391 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-window._db = db;
-window._ref = ref;
-window._push = push;
-window._get = get;
-window._query = query;
-window._orderByChild = orderByChild;
-window._limitToLast = limitToLast;
 
-// Initialize page
-window.initAll();
-</script>
-
-<script>
-// ====== DATA ======
-const PETUGAS = [
-  { name: "Fahmi Puja Ashri", cred: "A.Md.Rad" },
-  { name: "Gilang Nurgianti Fadilah", cred: "A.Md.Rad" },
-  { name: "Ardi Pratama Oktafiansyah", cred: "A.Md.Rad" },
-  { name: "Zhafira Nur Hasanah", cred: "A.Md.Rad" },
-  { name: "Dwi Alfi Pramesti", cred: "A.Md.Rad" },
-  { name: "Rita Riana", cred: "A.Md.Rad" },
-  { name: "Muhammad Rizky Maulana", cred: "A.Md.Kes" },
-  { name: "Muhammad Rafi Azhar", cred: "A.Md.Kes" },
-  { name: "Dias Riyandi", cred: "A.Md.Kes" },
-  { name: "Mochamad Taufik H", cred: "A.Md.Kes" },
-  { name: "Arief Maulana", cred: "A.Md.Kes" },
-  { name: "Salsa Dea Charira", cred: "A.Md.Kes" },
+// Indicators definition
+const indicators = [
+  { no:1,  label:"Respon time bedah ≤ 60 menit",      target:"100%",  satuan:"%" },
+  { no:2,  label:"Waktu tunggu Cito ≤ 30 menit",       target:"100%",  satuan:"%" },
+  { no:3,  label:"Expertise kritis ≤ 30 menit",        target:"100%",  satuan:"%" },
+  { no:4,  label:"Upload foto IGD ≤ 10 menit",         target:"≥90%",  satuan:"%" },
+  { no:5,  label:"Pengulangan pemeriksaan",             target:"≤5%",   satuan:"%" },
+  { no:6,  label:"CT Scan non kontras ≤120 menit",     target:"≥90%",  satuan:"%" },
+  { no:7,  label:"MRI non kontras ≤180 menit",         target:"≥90%",  satuan:"%" },
+  { no:8,  label:"Thorax poliklinik ≤40 menit",        target:"≤40 mnt",satuan:"Menit" },
+  { no:9,  label:"Keterlambatan thorax ≥30 mnt",       target:"≤20%",  satuan:"%" },
+  { no:10, label:"USG Abdomen ≤30 menit",              target:"≤30 mnt",satuan:"Menit" },
+  { no:11, label:"Keterlambatan USG ≥30 mnt",          target:"≤20%",  satuan:"%" },
+  { no:12, label:"Panoramic ≤120 menit",               target:"≤120 mnt",satuan:"Menit" },
+  { no:13, label:"Keterlambatan panoramic",            target:"≤20%",  satuan:"%" },
+  { no:14, label:"Upload CT kontras ≤60 menit",        target:"≥90%",  satuan:"%" },
+  { no:15, label:"Upload CT non kontras ≤30 menit",    target:"≥90%",  satuan:"%" },
+  { no:16, label:"Upload MRI kontras ≤60 menit",       target:"≥90%",  satuan:"%" },
+  { no:17, label:"Upload MRI non kontras ≤30 menit",   target:"≥90%",  satuan:"%" },
+  { no:18, label:"Kerusakan alat",                     target:"≤5%",   satuan:"%" },
+  { no:19, label:"Kepatuhan hand hygiene",             target:"100%",  satuan:"%" },
+  { no:20, label:"Identifikasi pasien",                target:"100%",  satuan:"%" },
+  { no:21, label:"Penggunaan APD",                     target:"100%",  satuan:"%" },
+  { no:22, label:"Kesalahan pemeriksaan",              target:"0",     satuan:"" },
+  { no:23, label:"Pasien jatuh",                       target:"0",     satuan:"" },
+  { no:24, label:"Kegagalan PME",                      target:"0",     satuan:"" },
+  { no:25, label:"Kegagalan PMI",                      target:"0",     satuan:"" },
+  { no:26, label:"Komplain pasien",                    target:"0",     satuan:"" },
 ];
 
-const INDIKATOR_MUTU = [
-  { no:1, name:"Respon time bedah ≤ 60 menit", target:"100%" },
-  { no:2, name:"Waktu tunggu Cito ≤ 30 menit", target:"100%" },
-  { no:3, name:"Expertise kritis ≤ 30 menit", target:"100%" },
-  { no:4, name:"Upload foto IGD ≤ 10 menit", target:"≥90%" },
-  { no:5, name:"Pengulangan pemeriksaan", target:"≤5%" },
-  { no:6, name:"CT Scan non kontras ≤120 menit", target:"≥90%" },
-  { no:7, name:"MRI non kontras ≤180 menit", target:"≥90%" },
-  { no:8, name:"Thorax poliklinik ≤40 menit", target:"≤40 mnt" },
-  { no:9, name:"Keterlambatan thorax ≥30 mnt", target:"≤20%" },
-  { no:10, name:"USG Abdomen ≤30 menit", target:"≤30 mnt" },
-  { no:11, name:"Keterlambatan USG ≥30 mnt", target:"≤20%" },
-  { no:12, name:"Panoramic ≤120 menit", target:"≤120 mnt" },
-  { no:13, name:"Keterlambatan panoramic", target:"≤20%" },
-  { no:14, name:"Upload CT kontras ≤60 menit", target:"≥90%" },
-  { no:15, name:"Upload CT non kontras ≤30 menit", target:"≥90%" },
-  { no:16, name:"Upload MRI kontras ≤60 menit", target:"≥90%" },
-  { no:17, name:"Upload MRI non kontras ≤30 menit", target:"≥90%" },
-  { no:18, name:"Kerusakan alat", target:"≤5%" },
-  { no:19, name:"Kepatuhan hand hygiene", target:"100%" },
-  { no:20, name:"Identifikasi pasien", target:"100%" },
-  { no:21, name:"Penggunaan APD", target:"100%" },
-  { no:22, name:"Kesalahan pemeriksaan", target:"0" },
-  { no:23, name:"Pasien jatuh", target:"0" },
-  { no:24, name:"Kegagalan PME", target:"0" },
-  { no:25, name:"Kegagalan PMI", target:"0" },
-  { no:26, name:"Komplain pasien", target:"0" },
-];
-
-const USG_TYPES = [
-  "USG Whole Abdomen","USG Upper Abdomen","USG Lower Abdomen",
-  "USG Thyroid / Leher","USG Doppler","USG Testis",
-  "USG Kandungan (UP. Radiolog)","USG Kandungan","USG Lower (UP. Sp. Urologi)",
-  "USG Appendix","USG Ekstremitas","USG Soft Tissue",
-  "USG Thorax Marker","USG Guiding","USG Mammae"
-];
-
-const DIST_KATS = ['ct','mri','usg'];
-const DIST_ROWS = {
-  ct:  ['Klinik','Ranap','IGD'],
-  mri: ['Klinik','Ranap','IGD','Luar'],
-  usg: ['Klinik','Ranap','IGD','Luar'],
-};
-
-// ====== INIT ======
-window.initAll = function() {
-  // Set today's date
-  document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
-
-  // Build dist grids
-  DIST_KATS.forEach(k => buildDist(k));
-
-  // Build mutu table
-  buildMutuTable();
-
-  // Build petugas
-  buildPetugas();
-
-  // Build USG jenis (fixed)
-  buildUSGJenis();
-
-  // Add default row for CT & MRI
-  addJenis('ct-jenis-body');
-  addJenis('mri-jenis-body');
-
-  // Load dashboard data
-  setTimeout(loadDashboard, 1500);
-};
-
-function buildDist(key) {
-  const container = document.getElementById(key + '-dist');
-  const rows = DIST_ROWS[key];
-  container.innerHTML = '';
-  rows.forEach(row => {
-    const id = key + '_' + row.toLowerCase().replace(/\W/g,'');
-    const div = document.createElement('div');
-    div.className = 'dist-row';
-    div.innerHTML = `
-      <div class="dist-label">${row}</div>
-      <div class="dist-inputs">
-        <div class="dist-field"><span>P4</span><input type="number" id="${id}_p4" placeholder="0" min="0" oninput="calcDist('${key}')"></div>
-        <div class="dist-field"><span>P3</span><input type="number" id="${id}_p3" placeholder="0" min="0" oninput="calcDist('${key}')"></div>
-        <div class="dist-field"><span>Ass</span><input type="number" id="${id}_ass" placeholder="0" min="0" oninput="calcDist('${key}')"></div>
-        <div class="dist-field"><span>Sub</span><input type="number" id="${id}_sub" readonly style="color:var(--accent3);font-weight:700;"></div>
-      </div>
-    `;
-    container.appendChild(div);
-  });
+// Build indicator table
+function buildIndicators() {
+  const tbody = document.getElementById('indicatorBody');
+  tbody.innerHTML = indicators.map(ind => `
+    <tr>
+      <td><strong>${ind.no}</strong></td>
+      <td>${ind.label}</td>
+      <td><span class="badge badge-orange">${ind.target}</span></td>
+      <td><input type="number" id="ind_${ind.no}" min="0" step="0.1" placeholder="—" oninput="calcRekap()"></td>
+      <td><span style="color:var(--text-muted);font-size:.8rem;">${ind.satuan}</span></td>
+    </tr>
+  `).join('');
 }
 
-function buildMutuTable() {
-  const tbody = document.getElementById('mutu-body');
-  tbody.innerHTML = '';
-  INDIKATOR_MUTU.forEach(ind => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="no-col">${ind.no}</td>
-      <td class="ind-col">${ind.name}</td>
-      <td class="target-col">${ind.target}</td>
-      <td class="cap-col"><input type="text" id="mutu_${ind.no}" placeholder="..."></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function buildPetugas() {
-  const grid = document.getElementById('pembuat-grid');
-  grid.innerHTML = '';
-  PETUGAS.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'pembuat-item';
-    div.id = 'pitem_' + i;
-    div.innerHTML = `
-      <input type="checkbox" id="pcheck_${i}" onchange="togglePembuat(${i})">
-      <label for="pcheck_${i}">
-        <strong>${p.name}</strong>
-        <span>${p.cred}</span>
-      </label>
-    `;
-    grid.appendChild(div);
-  });
-}
-
-function buildUSGJenis() {
-  const tbody = document.getElementById('usg-jenis-body');
-  tbody.innerHTML = '';
-  USG_TYPES.forEach(type => {
-    const tr = document.createElement('tr');
-    const safeId = 'usg_' + type.replace(/\W/g, '_');
-    tr.innerHTML = `
-      <td style="font-size:13px;color:var(--text2);">${type}</td>
-      <td><input type="number" id="${safeId}" placeholder="0" min="0" oninput="calcDist('usg')"></td>
-      <td></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-// ====== TOGGLE ======
-window.toggleSection = function(head) {
-  const body = head.nextElementSibling;
-  const icon = head.querySelector('.toggle-icon');
-  body.classList.toggle('collapsed');
-  icon.textContent = body.classList.contains('collapsed') ? '▶' : '▼';
-};
-
-window.togglePembuat = function(i) {
-  const div = document.getElementById('pitem_' + i);
-  const cb = document.getElementById('pcheck_' + i);
-  div.classList.toggle('selected', cb.checked);
-};
-
-// ====== CALC ======
-window.updateRontgenTotal = function() {
-  const p4 = +document.getElementById('rontgen_p4').value||0;
-  const p3 = +document.getElementById('rontgen_p3').value||0;
-  const ass = +document.getElementById('rontgen_ass').value||0;
-  const mcu = +document.getElementById('rontgen_mcu').value||0;
-  document.getElementById('rontgen_total').value = p4+p3+ass+mcu;
-};
-
-window.calcDist = function(key) {
-  const rows = DIST_ROWS[key];
-  let total = 0;
-  rows.forEach(row => {
-    const id = key + '_' + row.toLowerCase().replace(/\W/g,'');
-    const p4 = +document.getElementById(id+'_p4')?.value||0;
-    const p3 = +document.getElementById(id+'_p3')?.value||0;
-    const ass = +document.getElementById(id+'_ass')?.value||0;
-    const sub = p4+p3+ass;
-    const subEl = document.getElementById(id+'_sub');
-    if(subEl) subEl.value = sub;
-    total += sub;
-  });
-  if(key === 'usg') {
-    // also sum jenis
-    let jenisTotal = 0;
-    USG_TYPES.forEach(type => {
-      const safeId = 'usg_' + type.replace(/\W/g, '_');
-      jenisTotal += +document.getElementById(safeId)?.value||0;
-    });
-    total = Math.max(total, jenisTotal);
-  }
-  document.getElementById(key+'_total').value = total;
-};
-
-window.calcLain = function(prefix) {
-  const p4 = +document.getElementById(prefix+'_p4').value||0;
-  const p3 = +document.getElementById(prefix+'_p3').value||0;
-  const ass = +document.getElementById(prefix+'_ass').value||0;
-  document.getElementById(prefix+'_total').value = p4+p3+ass;
-};
-
-// ====== DYNAMIC ROWS ======
-window.addJenis = function(tbodyId) {
-  const tbody = document.getElementById(tbodyId);
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><input type="text" placeholder="Nama jenis pemeriksaan..."></td>
-    <td><input type="number" placeholder="0" min="0"></td>
-    <td><button class="del-btn" onclick="this.closest('tr').remove()">✕ Hapus</button></td>
-  `;
-  tbody.appendChild(tr);
-};
-
-// ====== REKAP ======
-window.hitungRekap = function() {
-  let tercapai = 0;
-  INDIKATOR_MUTU.forEach(ind => {
-    const val = document.getElementById('mutu_'+ind.no).value.trim();
-    if(val && val !== '' && val !== '....') tercapai++;
-  });
-  document.getElementById('rekap-tercapai').textContent = tercapai;
-  const pct = Math.round(tercapai/26*100);
-  document.getElementById('rekap-pct').textContent = pct + '%';
-};
-
-// ====== COLLECT DATA ======
+// Collect form data
 function collectData() {
-  const tanggal = document.getElementById('tanggal').value;
-  const data = {
-    tanggal,
-    timestamp: Date.now(),
+  // CT types
+  const ctTypes = [];
+  document.querySelectorAll('#ct_types .dynamic-row').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    if (inputs[0].value) ctTypes.push({ jenis: inputs[0].value, jumlah: inputs[1].value || 0 });
+  });
+  const mriTypes = [];
+  document.querySelectorAll('#mri_types .dynamic-row').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    if (inputs[0].value) mriTypes.push({ jenis: inputs[0].value, jumlah: inputs[1].value || 0 });
+  });
+  const usgTypes = [];
+  document.querySelectorAll('#usg_types .dynamic-row').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    if (inputs[0].value) usgTypes.push({ jenis: inputs[0].value, jumlah: inputs[1].value || 0 });
+  });
+
+  const indCapaian = {};
+  indicators.forEach(ind => {
+    indCapaian[`ind_${ind.no}`] = v(`ind_${ind.no}`);
+  });
+
+  const tercapai = parseInt(document.getElementById('rekap_tercapai').textContent) || 0;
+  const persen = document.getElementById('rekap_persen').textContent;
+
+  return {
+    tanggal: document.getElementById('tglInput').value,
+    nama: document.getElementById('namaInput').value,
+    gelar: document.getElementById('gelarInput').value,
     rontgen: {
-      total: +document.getElementById('rontgen_total').value||0,
-      p4: +document.getElementById('rontgen_p4').value||0,
-      p3: +document.getElementById('rontgen_p3').value||0,
-      asuransi: +document.getElementById('rontgen_ass').value||0,
-      mcu: +document.getElementById('rontgen_mcu').value||0,
+      total: v('rntg_total'), p4: v('rntg_p4'), p3: v('rntg_p3'),
+      asuransi: v('rntg_ass'), mcu: v('rntg_mcu')
     },
-    ct: collectModality('ct'),
-    mri: collectModality('mri'),
-    usg: collectUSG(),
+    ct: {
+      total: v('ct_total'),
+      klinik: { jml: v('ct_kl'), p4: v('ct_kl_p4'), p3: v('ct_kl_p3'), ass: v('ct_kl_ass') },
+      ranap:  { jml: v('ct_rn'), p4: v('ct_rn_p4'), p3: v('ct_rn_p3'), ass: v('ct_rn_ass') },
+      igd:    { jml: v('ct_igd'), p4: v('ct_igd_p4'), p3: v('ct_igd_p3'), ass: v('ct_igd_ass') },
+      types: ctTypes
+    },
+    mri: {
+      total: v('mri_total'),
+      klinik: { jml: v('mri_kl'), p4: v('mri_kl_p4'), p3: v('mri_kl_p3'), ass: v('mri_kl_ass') },
+      ranap:  { jml: v('mri_rn'), p4: v('mri_rn_p4'), p3: v('mri_rn_p3'), ass: v('mri_rn_ass') },
+      igd:    { jml: v('mri_igd'), p4: v('mri_igd_p4'), p3: v('mri_igd_p3'), ass: v('mri_igd_ass') },
+      luar:   { jml: v('mri_lr'), p4: v('mri_lr_p4'), p3: v('mri_lr_p3'), ass: v('mri_lr_ass') },
+      types: mriTypes
+    },
+    usg: {
+      total: v('usg_total'),
+      klinik: { jml: v('usg_kl'), p4: v('usg_kl_p4'), p3: v('usg_kl_p3'), ass: v('usg_kl_ass') },
+      ranap:  { jml: v('usg_rn'), p4: v('usg_rn_p4'), p3: v('usg_rn_p3'), ass: v('usg_rn_ass') },
+      igd:    { jml: v('usg_igd'), p4: v('usg_igd_p4'), p3: v('usg_igd_p3'), ass: v('usg_igd_ass') },
+      luar:   { jml: v('usg_lr'), p4: v('usg_lr_p4'), p3: v('usg_lr_p3'), ass: v('usg_lr_ass') },
+      types: usgTypes
+    },
     lain: {
-      panoramic: { p4:+document.getElementById('pan_p4').value||0, p3:+document.getElementById('pan_p3').value||0, ass:+document.getElementById('pan_ass').value||0, total:+document.getElementById('pan_total').value||0 },
-      carm: { p4:+document.getElementById('carm_p4').value||0, p3:+document.getElementById('carm_p3').value||0, ass:+document.getElementById('carm_ass').value||0, total:+document.getElementById('carm_total').value||0 },
-      cathlab: { p4:+document.getElementById('cath_p4').value||0, p3:+document.getElementById('cath_p3').value||0, ass:+document.getElementById('cath_ass').value||0, total:+document.getElementById('cath_total').value||0 },
+      panoramic: { total: v('pan_total'), p4: v('pan_p4'), p3: v('pan_p3'), ass: v('pan_ass') },
+      carm:      { total: v('carm_total'), p4: v('carm_p4'), p3: v('carm_p3'), ass: v('carm_ass') },
+      cathlab:   { total: v('cath_total'), p4: v('cath_p4'), p3: v('cath_p3'), ass: v('cath_ass') }
     },
     pelayanan: {
-      malam: +document.getElementById('lap_malam').value||0,
-      igd_tidak_terkirim: +document.getElementById('order_igd').value||0,
+      laporan_malam: v('lap_malam'),
+      order_igd_gagal: v('order_igd')
     },
-    mutu: collectMutu(),
-    rekap: {
-      tercapai: document.getElementById('rekap-tercapai').textContent,
-      total: 26,
-      pct: document.getElementById('rekap-pct').textContent,
-      keterlambatan: +document.getElementById('keterlambatan').value||0,
-    },
-    pembuat: getPembuat(),
+    indikator: indCapaian,
+    rekap: { tercapai, total: 26, persen },
+    lainnya: { keterlambatan_karyawan: document.getElementById('terlambat').value },
+    timestamp: Date.now()
   };
-  return data;
 }
 
-function collectModality(key) {
-  const rows = DIST_ROWS[key];
-  const dist = {};
-  rows.forEach(row => {
-    const id = key + '_' + row.toLowerCase().replace(/\W/g,'');
-    dist[row] = {
-      p4: +document.getElementById(id+'_p4')?.value||0,
-      p3: +document.getElementById(id+'_p3')?.value||0,
-      ass: +document.getElementById(id+'_ass')?.value||0,
-    };
-  });
-  const jenisTbody = document.getElementById(key+'-jenis-body');
-  const jenis = [];
-  jenisTbody.querySelectorAll('tr').forEach(tr => {
-    const inputs = tr.querySelectorAll('input');
-    if(inputs[0]?.value) jenis.push({ nama: inputs[0].value, jumlah: +inputs[1]?.value||0 });
-  });
-  return { total: +document.getElementById(key+'_total').value||0, distribusi: dist, jenis };
+function v(id) {
+  const el = document.getElementById(id);
+  return el ? (el.value || 0) : 0;
 }
 
-function collectUSG() {
-  const rows = DIST_ROWS['usg'];
-  const dist = {};
-  rows.forEach(row => {
-    const id = 'usg_' + row.toLowerCase().replace(/\W/g,'');
-    dist[row] = {
-      p4: +document.getElementById(id+'_p4')?.value||0,
-      p3: +document.getElementById(id+'_p3')?.value||0,
-      ass: +document.getElementById(id+'_ass')?.value||0,
-    };
-  });
-  const jenis = {};
-  USG_TYPES.forEach(type => {
-    const safeId = 'usg_' + type.replace(/\W/g, '_');
-    const val = +document.getElementById(safeId)?.value||0;
-    if(val > 0) jenis[type] = val;
-  });
-  return { total: +document.getElementById('usg_total').value||0, distribusi: dist, jenis };
-}
-
-function collectMutu() {
-  const mutu = {};
-  INDIKATOR_MUTU.forEach(ind => {
-    mutu['ind_'+ind.no] = document.getElementById('mutu_'+ind.no)?.value || '';
-  });
-  return mutu;
-}
-
-function getPembuat() {
-  const result = [];
-  PETUGAS.forEach((p, i) => {
-    if(document.getElementById('pcheck_'+i)?.checked) result.push(p.name + ', ' + p.cred);
-  });
-  return result;
-}
-
-// ====== SUBMIT ======
-window.submitForm = async function() {
-  const tanggal = document.getElementById('tanggal').value;
-  if(!tanggal) { showToast('❗ Pilih tanggal terlebih dahulu!', 'error'); return; }
-  showLoading(true);
+// Save to Firebase
+window.simpanLaporan = async function() {
+  const tgl = document.getElementById('tglInput').value;
+  if (!tgl) { showToast('Pilih tanggal terlebih dahulu!', 'error'); return; }
+  const btn = document.querySelector('.btn-primary');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<span class="loader"></span> Menyimpan...';
+  btn.disabled = true;
   try {
     const data = collectData();
-    const db = window._db;
-    const r = window._ref(db, 'laporan/' + tanggal.replace(/-/g,'_'));
-    await window._push(r, data);
-    showToast('✅ Laporan berhasil disimpan!', 'success');
+    await push(ref(db, 'laporan'), data);
+    showToast('✅ Laporan berhasil disimpan ke Firebase!', 'success');
   } catch(e) {
-    console.error(e);
-    showToast('❌ Gagal menyimpan: ' + e.message, 'error');
+    showToast('❌ Gagal simpan: ' + e.message, 'error');
+  } finally {
+    btn.innerHTML = orig; btn.disabled = false;
   }
-  showLoading(false);
 };
 
-// ====== WA ======
+// WhatsApp
 window.kirimWA = function() {
-  const data = collectData();
-  const tgl = data.tanggal || '—';
-  const fmt = (v) => v || '0';
+  const tgl = document.getElementById('tglInput').value;
+  if (!tgl) { showToast('Pilih tanggal terlebih dahulu!', 'error'); return; }
+  const d = collectData();
+  const dt = formatTanggal(tgl);
+  const nama = document.getElementById('namaInput').value || '(Petugas)';
+  const gelar = document.getElementById('gelarInput').value || '';
 
-  let msg = `*LAPORAN HARIAN RADIOLOGI*\n`;
-  msg += `Hari/Tanggal: ${tgl}\n\n`;
-  msg += `*A. PEMERIKSAAN RONTGEN*\n`;
-  msg += `Jumlah: ${fmt(data.rontgen.total)}\n`;
-  msg += `P4: ${fmt(data.rontgen.p4)} | P3: ${fmt(data.rontgen.p3)} | Asuransi: ${fmt(data.rontgen.asuransi)} | MCU: ${fmt(data.rontgen.mcu)}\n\n`;
-  msg += `*B. CT SCAN*\nJumlah: ${fmt(data.ct.total)}\n`;
-  const ctDist = data.ct.distribusi;
-  Object.keys(ctDist).forEach(k => {
-    const d = ctDist[k];
-    msg += `${k}: ${(d.p4||0)+(d.p3||0)+(d.ass||0)} (P4:${d.p4||0}, P3:${d.p3||0}, Ass:${d.ass||0})\n`;
-  });
-  msg += `\n*C. MRI*\nJumlah: ${fmt(data.mri.total)}\n`;
-  const mriDist = data.mri.distribusi;
-  Object.keys(mriDist).forEach(k => {
-    const d = mriDist[k];
-    msg += `${k}: ${(d.p4||0)+(d.p3||0)+(d.ass||0)} (P4:${d.p4||0}, P3:${d.p3||0}, Ass:${d.ass||0})\n`;
-  });
-  msg += `\n*D. USG*\nJumlah: ${fmt(data.usg.total)}\n`;
-  const usgDist = data.usg.distribusi;
-  Object.keys(usgDist).forEach(k => {
-    const d = usgDist[k];
-    msg += `${k}: ${(d.p4||0)+(d.p3||0)+(d.ass||0)} (P4:${d.p4||0}, P3:${d.p3||0}, Ass:${d.ass||0})\n`;
-  });
-  msg += `\n*E. PEMERIKSAAN LAIN*\n`;
-  msg += `Panoramic: ${data.lain.panoramic.total} | C-Arm: ${data.lain.carm.total} | Cathlab: ${data.lain.cathlab.total}\n`;
-  msg += `\n*F. PELAYANAN KHUSUS*\n`;
-  msg += `Laporan malam: ${data.pelayanan.malam} | Order IGD tidak terkirim: ${data.pelayanan.igd_tidak_terkirim}\n`;
-  msg += `\n*G. REKAP INDIKATOR MUTU*\n`;
-  msg += `Tercapai: ${data.rekap.tercapai} / 26 (${data.rekap.pct})\n`;
-  msg += `Keterlambatan karyawan: ${data.rekap.keterlambatan}\n`;
-  if(data.pembuat.length) {
-    msg += `\n*Dibuat Oleh:*\n${data.pembuat.join('\n')}\n`;
-  }
+  // Build CT types text
+  const ctTypesText = d.ct.types.length ? d.ct.types.map(t => `  • ${t.jenis}: ${t.jumlah}`).join('\n') : '  • -';
+  const mriTypesText = d.mri.types.length ? d.mri.types.map(t => `  • ${t.jenis}: ${t.jumlah}`).join('\n') : '  • -';
+  const usgTypesText = d.usg.types.length ? d.usg.types.map(t => `  • ${t.jenis}: ${t.jumlah}`).join('\n') : '  • -';
 
-  const encoded = encodeURIComponent(msg);
-  const wa = `https://wa.me/628984290300?text=${encoded}`;
-  window.open(wa, '_blank');
+  // Build indicator lines
+  const indLines = indicators.map(ind => {
+    const val = v(`ind_${ind.no}`);
+    return `${ind.no}. ${ind.label}: ${val}${ind.satuan}`;
+  }).join('\n');
+
+  const msg = `📊 *LAPORAN HARIAN RADIOLOGI*
+Hari/Tanggal: ${dt}
+
+*A. PEMERIKSAAN RONTGEN*
+Jumlah: ${d.rontgen.total}
+Rincian:
+• P4: ${d.rontgen.p4}
+• P3: ${d.rontgen.p3}
+• Asuransi: ${d.rontgen.asuransi}
+• MCU: ${d.rontgen.mcu}
+
+*B. CT SCAN*
+Jumlah: ${d.ct.total}
+Distribusi:
+• Klinik: ${d.ct.klinik.jml} (P4: ${d.ct.klinik.p4} | P3: ${d.ct.klinik.p3} | Ass: ${d.ct.klinik.ass})
+• Ranap: ${d.ct.ranap.jml} (P4: ${d.ct.ranap.p4} | P3: ${d.ct.ranap.p3} | Ass: ${d.ct.ranap.ass})
+• IGD: ${d.ct.igd.jml} (P4: ${d.ct.igd.p4} | P3: ${d.ct.igd.p3} | Ass: ${d.ct.igd.ass})
+Rincian:
+${ctTypesText}
+
+*C. MRI*
+Jumlah: ${d.mri.total}
+Distribusi:
+• Klinik: ${d.mri.klinik.jml} (P4: ${d.mri.klinik.p4} | P3: ${d.mri.klinik.p3} | Ass: ${d.mri.klinik.ass})
+• Ranap: ${d.mri.ranap.jml} (P4: ${d.mri.ranap.p4} | P3: ${d.mri.ranap.p3} | Ass: ${d.mri.ranap.ass})
+• IGD: ${d.mri.igd.jml} (P4: ${d.mri.igd.p4} | P3: ${d.mri.igd.p3} | Ass: ${d.mri.igd.ass})
+• Luar: ${d.mri.luar.jml} (P4: ${d.mri.luar.p4} | P3: ${d.mri.luar.p3} | Ass: ${d.mri.luar.ass})
+Rincian:
+${mriTypesText}
+
+*D. USG*
+Jumlah: ${d.usg.total}
+Distribusi:
+• Klinik: ${d.usg.klinik.jml} (P4: ${d.usg.klinik.p4} | P3: ${d.usg.klinik.p3} | Ass: ${d.usg.klinik.ass})
+• Ranap: ${d.usg.ranap.jml} (P4: ${d.usg.ranap.p4} | P3: ${d.usg.ranap.p3} | Ass: ${d.usg.ranap.ass})
+• IGD: ${d.usg.igd.jml} (P4: ${d.usg.igd.p4} | P3: ${d.usg.igd.p3} | Ass: ${d.usg.igd.ass})
+• Luar: ${d.usg.luar.jml} (P4: ${d.usg.luar.p4} | P3: ${d.usg.luar.p3} | Ass: ${d.usg.luar.ass})
+Rincian:
+${usgTypesText}
+
+*E. PEMERIKSAAN LAIN*
+• Panoramic: ${d.lain.panoramic.total} (P4: ${d.lain.panoramic.p4} | P3: ${d.lain.panoramic.p3} | Ass: ${d.lain.panoramic.ass})
+• C-Arm: ${d.lain.carm.total} (P4: ${d.lain.carm.p4} | P3: ${d.lain.carm.p3} | Ass: ${d.lain.carm.ass})
+• Cathlab: ${d.lain.cathlab.total} (P4: ${d.lain.cathlab.p4} | P3: ${d.lain.cathlab.p3} | Ass: ${d.lain.cathlab.ass})
+
+*F. PELAYANAN KHUSUS*
+• Laporan malam (21.00–07.00): ${d.pelayanan.laporan_malam}
+• Order IGD tidak terkirim: ${d.pelayanan.order_igd_gagal}
+
+*G. INDIKATOR MUTU*
+${indLines}
+
+*H. REKAP INDIKATOR*
+• Tercapai: ${d.rekap.tercapai}
+• Total: 26
+• Capaian: ${d.rekap.persen}
+
+*I. LAIN-LAIN*
+• Keterlambatan karyawan: ${d.lainnya.keterlambatan_karyawan || '-'}
+
+📍 Cirebon, ${dt}
+Dibuat oleh,
+TTD
+${nama}${gelar ? ' ' + gelar : ''}`;
+
+  const phone = '6208984290300';
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  showToast('📲 Membuka WhatsApp...', 'success');
 };
 
-// ====== DASHBOARD ======
-window.loadDashboard = async function() {
-  const now = new Date();
-  document.getElementById('dash-date').textContent = 'Update: ' + now.toLocaleString('id-ID');
-  showLoading(true);
-  try {
-    const db = window._db;
-    const r = window._ref(db, 'laporan');
-    const snap = await window._get(r);
-    if(!snap.exists()) {
-      showLoading(false);
+// Load dashboard
+window.loadDashboard = function() {
+  const dbRef = ref(db, 'laporan');
+  onValue(dbRef, (snapshot) => {
+    const data = snapshot.val();
+    if (!data) {
+      document.getElementById('historyBody').innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px;">Belum ada laporan tersimpan.</td></tr>';
+      updateDashCards([], {});
       return;
     }
-    const allData = snap.val();
-    // flatten
-    const reports = [];
-    Object.keys(allData).forEach(dayKey => {
-      const dayData = allData[dayKey];
-      Object.keys(dayData).forEach(pushKey => {
-        reports.push({ key: pushKey, ...dayData[pushKey] });
-      });
-    });
-    reports.sort((a,b) => b.timestamp - a.timestamp);
-    renderDashboard(reports);
-  } catch(e) {
-    console.error(e);
-  }
-  showLoading(false);
+    const entries = Object.entries(data).map(([k, v]) => ({ id: k, ...v }))
+      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    updateDashCards(entries, data);
+    renderHistory(entries);
+  }, { onlyOnce: true });
 };
 
-function renderDashboard(reports) {
-  const latest = reports[0];
-  if(latest) {
-    document.getElementById('ds-rontgen').textContent = latest.rontgen?.total ?? '—';
-    document.getElementById('ds-ct').textContent = latest.ct?.total ?? '—';
-    document.getElementById('ds-mri').textContent = latest.mri?.total ?? '—';
-    document.getElementById('ds-usg').textContent = latest.usg?.total ?? '—';
-    document.getElementById('ds-mutu').textContent = latest.rekap?.pct ?? '—';
-    document.getElementById('dash-mutu-pct').textContent = latest.rekap?.pct ?? '—';
-    renderMutuSummary(latest.mutu);
-  }
-  document.getElementById('dash-count').textContent = reports.length;
-  renderReportList(reports);
-}
-
-function renderReportList(reports) {
-  const list = document.getElementById('report-list');
-  if(!reports.length) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Belum ada laporan</p></div>';
+function updateDashCards(entries, _raw) {
+  document.getElementById('d_total_laporan').textContent = entries.length;
+  if (!entries.length) {
+    ['d_avg_rontgen','d_avg_ct','d_avg_mri','d_avg_usg','d_avg_capaian'].forEach(id => {
+      document.getElementById(id).textContent = '0';
+    });
     return;
   }
-  list.innerHTML = reports.slice(0,20).map(r => {
-    const d = r.tanggal || '—';
-    const total = (r.rontgen?.total||0) + (r.ct?.total||0) + (r.mri?.total||0) + (r.usg?.total||0);
-    const pembuat = r.pembuat?.length ? r.pembuat[0].split(',')[0] : 'Petugas';
-    return `<div class="report-item">
-      <div class="report-item-date">${d}</div>
-      <div class="report-item-info">
-        <div class="report-item-name">Laporan ${d}</div>
-        <div class="report-item-meta">Oleh: ${pembuat}</div>
-      </div>
-      <div class="report-item-count">${total}</div>
-    </div>`;
-  }).join('');
+  const avg = (fn) => Math.round(entries.reduce((s, e) => s + (parseFloat(fn(e)) || 0), 0) / entries.length);
+  document.getElementById('d_avg_rontgen').textContent = avg(e => e.rontgen?.total);
+  document.getElementById('d_avg_ct').textContent = avg(e => e.ct?.total);
+  document.getElementById('d_avg_mri').textContent = avg(e => e.mri?.total);
+  document.getElementById('d_avg_usg').textContent = avg(e => e.usg?.total);
+  const pctAvg = Math.round(entries.reduce((s, e) => {
+    const p = parseFloat((e.rekap?.persen || '0').replace('%',''));
+    return s + (isNaN(p) ? 0 : p);
+  }, 0) / entries.length);
+  document.getElementById('d_avg_capaian').textContent = pctAvg + '%';
 }
 
-function renderMutuSummary(mutu) {
-  const el = document.getElementById('mutu-summary-list');
-  if(!mutu) { el.innerHTML = '<div class="empty-state"><div class="icon">📉</div><p>Tidak ada data</p></div>'; return; }
-  const items = INDIKATOR_MUTU.slice(0, 12);
-  el.innerHTML = '<div class="mutu-summary">' + items.map(ind => {
-    const val = mutu['ind_'+ind.no] || '—';
-    const hasVal = val && val !== '—' && val !== '....';
-    return `<div class="mutu-row">
-      <div class="mutu-no">${ind.no}</div>
-      <div class="mutu-name">${ind.name}</div>
-      <div class="mutu-val" style="color:var(--accent)">${val}</div>
-      <div class="mutu-status ${hasVal ? 'status-ok' : 'status-na'}"></div>
-    </div>`;
-  }).join('') + '</div>';
+function renderHistory(entries) {
+  if (!entries.length) {
+    document.getElementById('historyBody').innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px;">Belum ada data.</td></tr>';
+    return;
+  }
+  document.getElementById('historyBody').innerHTML = entries.map(e => `
+    <tr>
+      <td><strong>${formatTanggal(e.tanggal) || '—'}</strong></td>
+      <td>${e.rontgen?.total || 0}</td>
+      <td>${e.ct?.total || 0}</td>
+      <td>${e.mri?.total || 0}</td>
+      <td>${e.usg?.total || 0}</td>
+      <td><span class="badge ${getBadgeClass(e.rekap?.persen)}">${e.rekap?.persen || '—'}</span></td>
+      <td>${e.nama || '—'}</td>
+      <td><button class="btn-detail" onclick='showDetail(${JSON.stringify(e)})'>Detail</button></td>
+    </tr>
+  `).join('');
 }
 
-// ====== UTILS ======
-window.showPage = function(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  event.target.classList.add('active');
-  if(page === 'dashboard') loadDashboard();
+function getBadgeClass(persen) {
+  if (!persen) return 'badge-orange';
+  const p = parseFloat(persen);
+  if (p >= 90) return 'badge-green';
+  if (p >= 70) return 'badge-orange';
+  return 'badge-red';
+}
+
+window.showDetail = function(e) {
+  document.getElementById('modalContent').textContent = JSON.stringify(e, null, 2);
+  document.getElementById('detailModal').classList.add('active');
 };
 
-function showLoading(show) {
-  document.getElementById('loadingOverlay').classList.toggle('show', show);
-}
+window.closeModal = function(ev) {
+  if (ev.target === document.getElementById('detailModal'))
+    document.getElementById('detailModal').classList.remove('active');
+};
 
-function showToast(msg, type='success') {
-  const t = document.getElementById('toast');
-  const icon = document.getElementById('toastIcon');
-  document.getElementById('toastMsg').textContent = msg;
-  t.className = 'toast ' + type;
-  icon.textContent = type === 'success' ? '✅' : '❌';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
+// ── HELPERS ──
+window.calcRontgenTotal = function() {}; // optional auto-sum
+
+window.calcRekap = function() {
+  let tercapai = 0;
+  indicators.forEach(ind => {
+    const val = parseFloat(v(`ind_${ind.no}`));
+    if (!isNaN(val) && val !== 0) tercapai++;
+  });
+  document.getElementById('rekap_tercapai').textContent = tercapai;
+  document.getElementById('rekap_persen').textContent = Math.round((tercapai / 26) * 100) + '%';
+};
+
+window.addTypeRow = function(prefix) {
+  const container = document.getElementById(`${prefix}_types`);
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <input type="text" placeholder="Nama jenis pemeriksaan..." style="flex:2">
+    <input type="number" placeholder="0" min="0" style="width:90px;flex:none;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:DM Sans,sans-serif;font-size:.9rem;background:var(--bg);">
+    <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(div);
+};
 
 window.resetForm = function() {
-  if(!confirm('Reset semua data form?')) return;
-  document.querySelectorAll('input[type=number], input[type=text], input[type=date]').forEach(el => el.value = '');
-  document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
-  document.querySelectorAll('.pembuat-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
-  document.getElementById('rekap-tercapai').textContent = '—';
-  document.getElementById('rekap-pct').textContent = '—';
+  if (!confirm('Reset semua isian form?')) return;
+  document.querySelectorAll('input[type=number], input[type=text]').forEach(el => el.value = '');
+  document.getElementById('tglInput').value = '';
+  document.getElementById('heroDate').textContent = '—';
+  ['ct_types','mri_types','usg_types'].forEach(id => document.getElementById(id).innerHTML = '');
+  document.getElementById('rekap_tercapai').textContent = '—';
+  document.getElementById('rekap_persen').textContent = '—';
+  showToast('🔄 Form direset', 'success');
 };
+
+window.showPage = function(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(name === 'form' ? 'form' : 'dash')) b.classList.add('active');
+  });
+  if (name === 'dashboard') loadDashboard();
+};
+
+window.updateDate = function() {
+  const tgl = document.getElementById('tglInput').value;
+  document.getElementById('heroDate').textContent = tgl ? formatTanggal(tgl) : '—';
+};
+
+function formatTanggal(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+
+window.showToast = function(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3000);
+};
+
+// Init
+buildIndicators();
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('tglInput').value = today;
+updateDate();
+document.getElementById('dashDate').textContent = new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+
+// Add default type rows
+addTypeRow('ct');
+addTypeRow('mri');
+addTypeRow('usg');
+
 </script>
 </body>
 </html>
