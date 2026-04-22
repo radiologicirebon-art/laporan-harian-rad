@@ -4,1278 +4,595 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laporan Harian Radiologi</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary: #fb861d;
-    --primary-dark: #e0720f;
-    --primary-light: #fff3e8;
-    --primary-glow: rgba(251,134,29,0.15);
-    --white: #ffffff;
-    --bg: #f8f9fb;
-    --card: #ffffff;
-    --border: #f0f0f4;
-    --text: #1a1a2e;
-    --text-muted: #6b7280;
-    --text-light: #9ca3af;
-    --success: #10b981;
-    --danger: #ef4444;
-    --info: #3b82f6;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    --shadow-lg: 0 12px 40px rgba(251,134,29,0.12), 0 4px 16px rgba(0,0,0,0.06);
-    --radius: 16px;
-    --radius-sm: 10px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue: #2596be;
+  --blue-dark: #1a7a9e;
+  --blue-deeper: #0f5f7d;
+  --blue-light: #e8f6fb;
+  --blue-mid: #b8dff0;
+  --blue-glow: rgba(37,150,190,0.15);
+  --black: #000000;
+  --g900: #111827;
+  --g700: #374151;
+  --g500: #6b7280;
+  --g300: #d1d5db;
+  --g100: #f3f4f6;
+  --g50:  #f9fafb;
+  --white: #ffffff;
+  --green: #10b981;
+  --red: #ef4444;
+  --sh-sm: 0 1px 4px rgba(0,0,0,.07);
+  --sh:    0 4px 16px rgba(37,150,190,.1), 0 1px 4px rgba(0,0,0,.05);
+  --sh-lg: 0 8px 32px rgba(37,150,190,.18);
+  --r: 14px; --rs: 9px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#eef2f7;color:var(--g900);min-height:100vh}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+/* NAV */
+nav{background:var(--black);position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.45)}
+.ni{max-width:1200px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nl{display:flex;align-items:center;gap:10px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem}
+.lb{background:var(--blue);color:#fff;padding:5px 11px;border-radius:7px;font-size:.72rem;font-weight:700;letter-spacing:.06em}
+.nt{display:flex;gap:3px}
+.tb{padding:7px 18px;border:none;background:rgba(255,255,255,.08);border-radius:8px;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s}
+.tb.active,.tb:hover{background:var(--blue);color:#fff;font-weight:600}
 
-  /* ── NAV ── */
-  nav {
-    background: var(--white);
-    border-bottom: 2px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: var(--shadow-sm);
-  }
-  .nav-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 20px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-logo {
-    display: flex; align-items: center; gap: 10px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 800; font-size: 1.1rem; color: var(--text);
-  }
-  .nav-logo span {
-    background: var(--primary);
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-  .nav-tabs {
-    display: flex; gap: 4px;
-  }
-  .tab-btn {
-    padding: 8px 18px;
-    border: none;
-    background: transparent;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .tab-btn.active, .tab-btn:hover {
-    background: var(--primary-light);
-    color: var(--primary);
-    font-weight: 600;
-  }
+/* PAGES */
+.page{display:none}.page.active{display:block}
+.wrap{max-width:1200px;margin:0 auto;padding:28px 20px}
 
-  /* ── PAGES ── */
-  .page { display: none; }
-  .page.active { display: block; }
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deeper) 100%);border-radius:var(--r);padding:30px 36px;color:#fff;margin-bottom:24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-50px;top:-50px;width:200px;height:200px;background:rgba(255,255,255,.07);border-radius:50%}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.3rem,2.8vw,1.85rem);font-weight:900;margin-bottom:4px;position:relative}
+.hero p{opacity:.8;font-size:.9rem;position:relative}
+.hd{margin-top:12px;font-weight:700;font-size:.88rem;background:rgba(255,255,255,.18);display:inline-block;padding:5px 13px;border-radius:7px;position:relative}
 
-  .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 32px 20px;
-  }
+/* DATE CARD */
+.dc{background:#fff;border-radius:var(--r);border:1px solid var(--g300);padding:16px 20px;margin-bottom:20px;display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;box-shadow:var(--sh-sm)}
 
-  /* ── HERO ── */
-  .hero {
-    background: linear-gradient(135deg, var(--primary) 0%, #ff6b00 100%);
-    border-radius: var(--radius);
-    padding: 36px 40px;
-    color: #fff;
-    margin-bottom: 32px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute; right: -40px; top: -40px;
-    width: 240px; height: 240px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 50%;
-  }
-  .hero::after {
-    content: '';
-    position: absolute; right: 60px; bottom: -60px;
-    width: 160px; height: 160px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50%;
-  }
-  .hero h1 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 800;
-    margin-bottom: 6px;
-  }
-  .hero p { opacity: .85; font-size: .95rem; }
-  .hero-date {
-    margin-top: 16px;
-    font-weight: 700;
-    font-size: 1rem;
-    background: rgba(255,255,255,0.2);
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 8px;
-  }
+/* SECTION CARD */
+.sc{background:#fff;border-radius:var(--r);border:1px solid var(--g300);margin-bottom:18px;overflow:hidden;box-shadow:var(--sh-sm);transition:box-shadow .2s}
+.sc:hover{box-shadow:var(--sh)}
+.sh{display:flex;align-items:center;gap:11px;padding:14px 20px;background:var(--blue)}
+.si{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;color:#fff;flex-shrink:0}
+.st{font-family:'Plus Jakarta Sans',sans-serif;font-size:.92rem;font-weight:700;color:#fff}
+.ss{font-size:.74rem;color:rgba(255,255,255,.72)}
+.sb{padding:20px}
 
-  /* ── SECTION CARD ── */
-  .section-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 24px;
-    overflow: hidden;
-    transition: box-shadow .2s;
-  }
-  .section-card:hover { box-shadow: var(--shadow); }
+/* FORM */
+.fr{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:.72rem;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg select{padding:9px 12px;border:1.5px solid var(--g300);border-radius:var(--rs);font-family:'Inter',sans-serif;font-size:.88rem;color:var(--g900);background:var(--g50);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow);background:#fff}
+/* AUTO fields */
+.auto{background:var(--blue-light)!important;border-color:var(--blue-mid)!important;color:var(--blue-deeper)!important;font-weight:700!important;font-size:.97rem!important;text-align:center;cursor:default!important}
+.al{color:var(--blue)!important}
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 18px 24px;
-    background: var(--primary-light);
-    border-bottom: 1px solid rgba(251,134,29,0.15);
-  }
-  .section-icon {
-    width: 38px; height: 38px;
-    background: var(--primary);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; color: #fff;
-    flex-shrink: 0;
-  }
-  .section-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .section-subtitle { font-size: .8rem; color: var(--text-muted); }
-  .section-body { padding: 24px; }
+/* DIST BLOCK */
+.db{background:var(--g50);border-radius:var(--rs);border:1px solid var(--g100);padding:13px;margin-bottom:11px}
+.dl{font-size:.73rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.dl::before{content:'';width:3px;height:12px;background:var(--blue);border-radius:2px}
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(106px,1fr));gap:8px}
 
-  /* ── FORM ── */
-  .form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group label {
-    font-size: .78rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: .04em;
-  }
-  .form-group input, .form-group select {
-    padding: 10px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: .9rem;
-    color: var(--text);
-    background: var(--bg);
-    transition: border-color .2s, box-shadow .2s;
-    -webkit-appearance: none;
-  }
-  .form-group input:focus, .form-group select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-glow);
-    background: #fff;
-  }
-  .form-group input[type="date"] { cursor: pointer; }
+/* DYNAMIC ROWS */
+.dr{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.dr input{flex:1;padding:8px 11px;border:1.5px solid var(--g300);border-radius:var(--rs);font-family:'Inter',sans-serif;font-size:.87rem;background:var(--g50);color:var(--g900);transition:border-color .2s}
+.dr input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow);background:#fff}
+.br{width:30px;height:30px;border:1.5px solid #fca5a5;background:#fff5f5;border-radius:7px;color:#ef4444;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.br:hover{background:#ef4444;color:#fff;border-color:#ef4444}
+.ba{display:flex;align-items:center;gap:7px;padding:8px 14px;background:var(--blue-light);border:1.5px dashed var(--blue);border-radius:var(--rs);color:var(--blue);font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:3px}
+.ba:hover{background:var(--blue);color:#fff;border-style:solid}
 
-  .full-row { grid-column: 1 / -1; }
+/* INDICATOR TABLE */
+.it{width:100%;border-collapse:collapse;font-size:.84rem}
+.it thead tr{background:var(--black)}
+.it th{padding:9px 13px;text-align:left;font-size:.72rem;color:#fff;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.it td{padding:8px 13px;border-bottom:1px solid var(--g100);vertical-align:middle}
+.it tr:last-child td{border-bottom:none}
+.it tr:nth-child(even) td{background:var(--g50)}
+.it tr:hover td{background:var(--blue-light)}
+.it input{width:84px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:7px;font-family:'Inter',sans-serif;font-size:.84rem;text-align:center;background:#fff;transition:border-color .2s}
+.it input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow)}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:600}
+.bb{background:var(--blue-light);color:var(--blue-deeper)}
+.bg{background:#d1fae5;color:#065f46}
+.bd{background:#fee2e2;color:#991b1b}
 
-  /* Patient distribution block */
-  .dist-block {
-    background: var(--bg);
-    border-radius: var(--radius-sm);
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-  .dist-label {
-    font-size: .8rem;
-    font-weight: 700;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    margin-bottom: 12px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .dist-label::before {
-    content: '';
-    width: 3px; height: 14px;
-    background: var(--primary);
-    border-radius: 2px;
-  }
-  .dist-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 10px;
-  }
+/* REKAP */
+.rb{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:2px solid var(--blue-mid)}
+.rs{flex:1;text-align:center;padding:18px 10px;background:var(--blue-light)}
+.rs:nth-child(2){background:var(--blue);color:#fff}
+.rs .num{font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:900;line-height:1;color:var(--blue-deeper)}
+.rs:nth-child(2) .num{color:#fff}
+.rs .lbl{font-size:.73rem;margin-top:5px;font-weight:500;color:var(--g500)}
+.rs:nth-child(2) .lbl{color:rgba(255,255,255,.75)}
 
-  /* Dynamic rows */
-  .dynamic-row {
-    display: flex; gap: 10px; align-items: center;
-    margin-bottom: 10px;
-  }
-  .dynamic-row input { flex: 1; }
-  .btn-remove {
-    width: 34px; height: 34px;
-    border: 1.5px solid #fca5a5;
-    background: #fff5f5;
-    border-radius: 8px;
-    color: #ef4444;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s; flex-shrink: 0;
-  }
-  .btn-remove:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+/* ACTIONS */
+.ab{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{display:flex;align-items:center;gap:7px;padding:11px 21px;border-radius:var(--rs);font-family:'Plus Jakarta Sans',sans-serif;font-size:.87rem;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.bp{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(37,150,190,.32)}
+.bp:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.bk{background:var(--black);color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.22)}
+.bk:hover{background:#222;transform:translateY(-1px)}
+.bw{background:#25D366;color:#fff;box-shadow:0 4px 12px rgba(37,211,102,.25)}
+.bw:hover{background:#128C7E;transform:translateY(-1px)}
+.bo{background:#fff;color:var(--g700);border:1.5px solid var(--g300)}
+.bo:hover{border-color:var(--blue);color:var(--blue)}
 
-  .btn-add {
-    display: flex; align-items: center; gap: 8px;
-    padding: 9px 16px;
-    background: var(--primary-light);
-    border: 1.5px dashed var(--primary);
-    border-radius: var(--radius-sm);
-    color: var(--primary);
-    font-family: 'DM Sans', sans-serif;
-    font-size: .85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-    margin-top: 4px;
-  }
-  .btn-add:hover { background: var(--primary); color: #fff; border-style: solid; }
+/* TOAST */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--black);color:#fff;padding:11px 17px;border-radius:11px;font-size:.84rem;font-weight:500;z-index:9999;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);max-width:290px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{background:var(--blue)}
+#toast.error{background:var(--red)}
 
-  /* ── INDICATOR TABLE ── */
-  .indicator-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: .875rem;
-  }
-  .indicator-table th {
-    background: var(--primary);
-    color: #fff;
-    padding: 10px 14px;
-    text-align: left;
-    font-weight: 600;
-    font-size: .78rem;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-  }
-  .indicator-table th:first-child { border-radius: 10px 0 0 0; }
-  .indicator-table th:last-child { border-radius: 0 10px 0 0; }
-  .indicator-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  .indicator-table tr:last-child td { border-bottom: none; }
-  .indicator-table tr:nth-child(even) td { background: var(--bg); }
-  .indicator-table tr:hover td { background: var(--primary-light); }
-  .indicator-table input {
-    width: 90px;
-    padding: 6px 10px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .875rem;
-    background: var(--white);
-    text-align: center;
-    transition: border-color .2s, box-shadow .2s;
-  }
-  .indicator-table input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-glow);
-  }
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: .75rem;
-    font-weight: 600;
-  }
-  .badge-orange { background: var(--primary-light); color: var(--primary); }
-  .badge-green { background: #d1fae5; color: #059669; }
-  .badge-red { background: #fee2e2; color: #dc2626; }
+/* DASHBOARD */
+.dg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.dcard{background:#fff;border-radius:var(--r);border:1px solid var(--g300);padding:17px;box-shadow:var(--sh-sm);position:relative;overflow:hidden;transition:all .2s}
+.dcard:hover{box-shadow:var(--sh-lg);transform:translateY(-2px)}
+.dcard::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--blue)}
+.dcard .ci{width:40px;height:40px;background:var(--blue-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin-bottom:11px}
+.dcard .cn{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.9rem;font-weight:900;color:var(--blue);line-height:1}
+.dcard .cl{font-size:.76rem;color:var(--g500);margin-top:4px;font-weight:500}
 
-  /* ── REKAP ── */
-  .rekap-box {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 20px 24px;
-    background: linear-gradient(135deg, var(--primary-light), #fff8f0);
-    border-radius: var(--radius-sm);
-    border: 1.5px solid rgba(251,134,29,0.2);
-  }
-  .rekap-stat {
-    text-align: center;
-    flex: 1; min-width: 100px;
-  }
-  .rekap-stat .num {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--primary);
-    line-height: 1;
-  }
-  .rekap-stat .lbl {
-    font-size: .78rem;
-    color: var(--text-muted);
-    margin-top: 4px;
-    font-weight: 500;
-  }
-  .rekap-divider { width: 1px; height: 48px; background: rgba(251,134,29,.25); }
+/* HISTORY TABLE */
+.ht{width:100%;border-collapse:collapse;font-size:.84rem}
+.ht thead tr{background:var(--black)}
+.ht th{padding:10px 14px;text-align:left;font-size:.72rem;color:#fff;text-transform:uppercase;letter-spacing:.05em}
+.ht td{padding:10px 14px;border-bottom:1px solid var(--g100)}
+.ht tr:hover td{background:var(--blue-light)}
+.bdet{padding:5px 11px;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid);border-radius:7px;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s}
+.bdet:hover{background:var(--blue);color:#fff}
 
-  /* ── ACTIONS ── */
-  .action-bar {
-    display: flex; gap: 12px; flex-wrap: wrap;
-    margin-top: 32px; margin-bottom: 16px;
-  }
-  .btn {
-    display: flex; align-items: center; gap: 8px;
-    padding: 12px 24px;
-    border-radius: var(--radius-sm);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: .9rem;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all .2s;
-  }
-  .btn-primary {
-    background: var(--primary);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(251,134,29,0.35);
-  }
-  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(251,134,29,0.45); }
-  .btn-wa {
-    background: #25D366;
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(37,211,102,0.3);
-  }
-  .btn-wa:hover { background: #128C7E; transform: translateY(-1px); }
-  .btn-outline {
-    background: var(--white);
-    color: var(--text);
-    border: 1.5px solid var(--border);
-  }
-  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+/* LOADER */
+.loader{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  /* ── TOAST ── */
-  #toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: var(--text);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-size: .875rem;
-    font-weight: 500;
-    z-index: 9999;
-    transform: translateY(80px);
-    opacity: 0;
-    transition: all .3s cubic-bezier(.34,1.56,.64,1);
-    max-width: 320px;
-  }
-  #toast.show { transform: translateY(0); opacity: 1; }
-  #toast.success { background: #059669; }
-  #toast.error { background: #dc2626; }
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;justify-content:center;align-items:flex-start;padding:36px 16px;overflow-y:auto}
+.mo.active{display:flex}
+.modal{background:#fff;border-radius:var(--r);padding:26px;max-width:640px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.modal h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:14px;color:var(--blue)}
+.modal pre{background:var(--g50);border-radius:var(--rs);padding:13px;font-size:.77rem;white-space:pre-wrap;word-break:break-word;max-height:370px;overflow-y:auto;line-height:1.6;border:1px solid var(--g100)}
+.mc{margin-top:13px;padding:9px 17px;background:var(--g100);border:none;border-radius:var(--rs);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;color:var(--g700);transition:all .2s}
+.mc:hover{background:var(--black);color:#fff}
 
-  /* ── DASHBOARD ── */
-  .dash-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .dash-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 20px;
-    box-shadow: var(--shadow-sm);
-    position: relative;
-    overflow: hidden;
-    transition: all .25s;
-  }
-  .dash-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-  .dash-card::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 4px;
-    background: var(--primary);
-    border-radius: 0 0 var(--radius) var(--radius);
-  }
-  .dash-card .card-icon {
-    width: 44px; height: 44px;
-    background: var(--primary-light);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    margin-bottom: 14px;
-  }
-  .dash-card .card-num {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--primary);
-    line-height: 1;
-  }
-  .dash-card .card-label {
-    font-size: .8rem;
-    color: var(--text-muted);
-    margin-top: 6px;
-    font-weight: 500;
-  }
+.slbl{font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:700;color:var(--g700);margin:16px 0 9px;text-transform:uppercase;letter-spacing:.05em;border-left:3px solid var(--blue);padding-left:8px}
 
-  /* History table */
-  .history-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: .875rem;
-  }
-  .history-table th {
-    background: var(--text);
-    color: #fff;
-    padding: 12px 16px;
-    text-align: left;
-    font-size: .78rem;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    font-weight: 600;
-  }
-  .history-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .history-table tr:hover td { background: var(--primary-light); }
-  .history-table .btn-detail {
-    padding: 5px 12px;
-    background: var(--primary-light);
-    color: var(--primary);
-    border: 1px solid var(--primary);
-    border-radius: 7px;
-    font-size: .78rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .history-table .btn-detail:hover { background: var(--primary); color: #fff; }
-
-  /* ── LOADING ── */
-  .loader {
-    display: inline-block; width: 18px; height: 18px;
-    border: 2.5px solid rgba(255,255,255,.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin .6s linear infinite;
-    vertical-align: middle;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.5);
-    z-index: 200;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 40px 16px;
-    overflow-y: auto;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal {
-    background: var(--white);
-    border-radius: var(--radius);
-    padding: 32px;
-    max-width: 700px;
-    width: 100%;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
-  }
-  .modal h2 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 20px;
-    color: var(--text);
-  }
-  .modal pre {
-    background: var(--bg);
-    border-radius: var(--radius-sm);
-    padding: 16px;
-    font-size: .8rem;
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-height: 400px;
-    overflow-y: auto;
-    color: var(--text);
-    line-height: 1.6;
-  }
-  .modal-close {
-    margin-top: 16px;
-    padding: 10px 20px;
-    background: var(--border);
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  /* ── DATE INPUT HEADER ── */
-  .date-input-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    box-shadow: var(--shadow-sm);
-  }
-  .date-input-card label {
-    font-weight: 700;
-    font-size: .9rem;
-    white-space: nowrap;
-  }
-  .date-input-card input[type="date"] {
-    padding: 10px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: .9rem;
-    color: var(--text);
-    cursor: pointer;
-    background: var(--bg);
-  }
-  .date-input-card input[type="date"]:focus {
-    outline: none; border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-glow);
-  }
-
-  /* Nama & Gelar */
-  .nama-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 16px;
-  }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .nav-tabs .tab-btn { padding: 7px 12px; font-size: .8rem; }
-    .container { padding: 20px 14px; }
-    .hero { padding: 24px 20px; }
-    .section-body { padding: 16px; }
-    .dash-grid { grid-template-columns: repeat(2, 1fr); }
-    .rekap-divider { display: none; }
-    .action-bar { flex-direction: column; }
-    .btn { justify-content: center; }
-    .nama-row { grid-template-columns: 1fr; }
-    .indicator-table { font-size: .78rem; }
-    .indicator-table th, .indicator-table td { padding: 8px 10px; }
-  }
+@media(max-width:600px){
+  .nt .tb{padding:6px 10px;font-size:.77rem}
+  .wrap{padding:16px 11px}
+  .hero{padding:20px 16px}
+  .sb{padding:14px}
+  .dg2{grid-template-columns:repeat(2,1fr)}
+  .ab{flex-direction:column}
+  .btn{justify-content:center}
+  .rb{flex-direction:column}
+  .it,.ht{font-size:.76rem}
+  .it th,.it td,.ht th,.ht td{padding:7px 7px}
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="nav-inner">
-    <div class="nav-logo">
-      <span>☢️ RAD</span>
-      Laporan Radiologi
-    </div>
-    <div class="nav-tabs">
-      <button class="tab-btn active" onclick="showPage('form')">📋 Form</button>
-      <button class="tab-btn" onclick="showPage('dashboard')">📊 Dashboard</button>
+  <div class="ni">
+    <div class="nl"><span class="lb">☢️ RAD</span> Radiologi Daily Report</div>
+    <div class="nt">
+      <button class="tb active" onclick="showPage('form')">📋 Form</button>
+      <button class="tb" onclick="showPage('dashboard')">📊 Dashboard</button>
     </div>
   </div>
 </nav>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- ═══════════════ PAGE: FORM ═══════════════ -->
+<!-- ════════ FORM PAGE ════════ -->
 <div id="page-form" class="page active">
-<div class="container">
+<div class="wrap">
 
-  <!-- Hero -->
   <div class="hero">
     <h1>📋 Laporan Harian Radiologi</h1>
     <p>Instalasi Radiologi — RS Cirebon</p>
-    <div class="hero-date" id="heroDate">—</div>
+    <div class="hd" id="heroDate">—</div>
   </div>
 
-  <!-- Date & Nama -->
-  <div class="date-input-card">
-    <label>📅 Hari/Tanggal:</label>
-    <input type="date" id="tglInput" onchange="updateDate()">
-    <div class="nama-row" style="flex:1;">
-      <div class="form-group">
-        <label>Nama Lengkap</label>
-        <input type="text" id="namaInput" placeholder="dr. Nama Lengkap...">
-      </div>
-      <div class="form-group">
-        <label>Gelar / Jabatan</label>
-        <input type="text" id="gelarInput" placeholder="Sp.Rad, MARS...">
-      </div>
+  <!-- Identitas -->
+  <div class="dc">
+    <div class="fg" style="min-width:175px">
+      <label>📅 Hari / Tanggal</label>
+      <input type="date" id="tglInput" onchange="updateDate()">
+    </div>
+    <div class="fg" style="flex:2;min-width:190px">
+      <label>Nama Lengkap</label>
+      <input type="text" id="namaInput" placeholder="dr. Nama Lengkap...">
+    </div>
+    <div class="fg" style="flex:1;min-width:150px">
+      <label>Gelar / Jabatan</label>
+      <input type="text" id="gelarInput" placeholder="Sp.Rad, MARS...">
     </div>
   </div>
 
   <!-- A. RONTGEN -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">🩻</div>
-      <div>
-        <div class="section-title">A. Pemeriksaan Rontgen</div>
-        <div class="section-subtitle">X-Ray konvensional</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Jumlah Total</label>
-          <input type="number" id="rntg_total" min="0" placeholder="0" oninput="calcRontgenTotal()">
-        </div>
-        <div class="form-group">
-          <label>P4</label>
-          <input type="number" id="rntg_p4" min="0" placeholder="0" oninput="calcRontgenTotal()">
-        </div>
-        <div class="form-group">
-          <label>P3</label>
-          <input type="number" id="rntg_p3" min="0" placeholder="0" oninput="calcRontgenTotal()">
-        </div>
-        <div class="form-group">
-          <label>Asuransi</label>
-          <input type="number" id="rntg_ass" min="0" placeholder="0" oninput="calcRontgenTotal()">
-        </div>
-        <div class="form-group">
-          <label>MCU</label>
-          <input type="number" id="rntg_mcu" min="0" placeholder="0" oninput="calcRontgenTotal()">
-        </div>
+  <div class="sc">
+    <div class="sh"><div class="si">🩻</div><div><div class="st">A. Pemeriksaan Rontgen</div><div class="ss">Jumlah otomatis = P4 + P3 + Asuransi + MCU</div></div></div>
+    <div class="sb">
+      <div class="fr">
+        <div class="fg"><label class="al">⚡ Jumlah Total</label><input type="number" id="rntg_total" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="rntg_p4" min="0" placeholder="0" oninput="calcRontgen()"></div>
+        <div class="fg"><label>P3</label><input type="number" id="rntg_p3" min="0" placeholder="0" oninput="calcRontgen()"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="rntg_ass" min="0" placeholder="0" oninput="calcRontgen()"></div>
+        <div class="fg"><label>MCU</label><input type="number" id="rntg_mcu" min="0" placeholder="0" oninput="calcRontgen()"></div>
       </div>
     </div>
   </div>
 
   <!-- B. CT SCAN -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">🔬</div>
-      <div>
-        <div class="section-title">B. CT Scan</div>
-        <div class="section-subtitle">Computed Tomography</div>
+  <div class="sc">
+    <div class="sh"><div class="si">🔬</div><div><div class="st">B. CT Scan</div><div class="ss">Sub-total & total otomatis dari P4+P3+Asuransi</div></div></div>
+    <div class="sb">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:var(--blue-light);border-radius:var(--rs);padding:10px 14px;border:1px solid var(--blue-mid)">
+        <span style="font-size:.8rem;font-weight:700;color:var(--blue)">⚡ JUMLAH TOTAL CT SCAN (Auto):</span>
+        <input type="number" id="ct_total" class="auto" readonly placeholder="0" style="width:90px;padding:7px 11px;border:1.5px solid var(--blue-mid);border-radius:8px;background:#fff;font-weight:800;font-size:1.1rem;color:var(--blue-deeper);text-align:center">
       </div>
-    </div>
-    <div class="section-body">
-      <div class="form-row" style="max-width:200px">
-        <div class="form-group">
-          <label>Jumlah Total</label>
-          <input type="number" id="ct_total" min="0" placeholder="0" oninput="autoCalcDist('ct')">
-        </div>
-      </div>
-      <!-- Distribution -->
-      <div id="ct_dist">
-        <div class="dist-block">
-          <div class="dist-label">Klinik</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="ct_kl" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="ct_kl_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="ct_kl_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="ct_kl_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">Ranap</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="ct_rn" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="ct_rn_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="ct_rn_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="ct_rn_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">IGD</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="ct_igd" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="ct_igd_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="ct_igd_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="ct_igd_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-      </div>
-      <div style="font-weight:700;font-size:.85rem;color:var(--text);margin:20px 0 10px;">Rincian Jenis Pemeriksaan CT</div>
+      <div class="db"><div class="dl">Klinik</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="ct_kl" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="ct_kl_p4" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="ct_kl_p3" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="ct_kl_ass" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+      </div></div>
+      <div class="db"><div class="dl">Ranap</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="ct_rn" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="ct_rn_p4" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="ct_rn_p3" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="ct_rn_ass" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+      </div></div>
+      <div class="db"><div class="dl">IGD</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="ct_igd" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="ct_igd_p4" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="ct_igd_p3" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="ct_igd_ass" min="0" placeholder="0" oninput="calcDist('ct')"></div>
+      </div></div>
+      <div class="slbl">Rincian Jenis Pemeriksaan CT</div>
       <div id="ct_types"></div>
-      <button class="btn-add" onclick="addTypeRow('ct')">➕ Tambah Jenis</button>
+      <button class="ba" onclick="addRow('ct')">➕ Tambah Jenis</button>
     </div>
   </div>
 
   <!-- C. MRI -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">🧲</div>
-      <div>
-        <div class="section-title">C. MRI</div>
-        <div class="section-subtitle">Magnetic Resonance Imaging</div>
+  <div class="sc">
+    <div class="sh"><div class="si">🧲</div><div><div class="st">C. MRI</div><div class="ss">Sub-total & total otomatis dari P4+P3+Asuransi</div></div></div>
+    <div class="sb">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:var(--blue-light);border-radius:var(--rs);padding:10px 14px;border:1px solid var(--blue-mid)">
+        <span style="font-size:.8rem;font-weight:700;color:var(--blue)">⚡ JUMLAH TOTAL MRI (Auto):</span>
+        <input type="number" id="mri_total" class="auto" readonly placeholder="0" style="width:90px;padding:7px 11px;border:1.5px solid var(--blue-mid);border-radius:8px;background:#fff;font-weight:800;font-size:1.1rem;color:var(--blue-deeper);text-align:center">
       </div>
-    </div>
-    <div class="section-body">
-      <div class="form-row" style="max-width:200px">
-        <div class="form-group">
-          <label>Jumlah Total</label>
-          <input type="number" id="mri_total" min="0" placeholder="0">
-        </div>
-      </div>
-      <div id="mri_dist">
-        <div class="dist-block">
-          <div class="dist-label">Klinik</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_kl" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="mri_kl_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="mri_kl_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_kl_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">Ranap</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_rn" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="mri_rn_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="mri_rn_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_rn_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">IGD</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_igd" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="mri_igd_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="mri_igd_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_igd_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">Luar</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="mri_lr" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="mri_lr_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="mri_lr_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="mri_lr_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-      </div>
-      <div style="font-weight:700;font-size:.85rem;color:var(--text);margin:20px 0 10px;">Rincian Jenis Pemeriksaan MRI</div>
+      <div class="db"><div class="dl">Klinik</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="mri_kl" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="mri_kl_p4" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="mri_kl_p3" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="mri_kl_ass" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+      </div></div>
+      <div class="db"><div class="dl">Ranap</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="mri_rn" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="mri_rn_p4" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="mri_rn_p3" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="mri_rn_ass" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+      </div></div>
+      <div class="db"><div class="dl">IGD</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="mri_igd" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="mri_igd_p4" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="mri_igd_p3" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="mri_igd_ass" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+      </div></div>
+      <div class="db"><div class="dl">Luar</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="mri_lr" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="mri_lr_p4" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="mri_lr_p3" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="mri_lr_ass" min="0" placeholder="0" oninput="calcDist('mri')"></div>
+      </div></div>
+      <div class="slbl">Rincian Jenis Pemeriksaan MRI</div>
       <div id="mri_types"></div>
-      <button class="btn-add" onclick="addTypeRow('mri')">➕ Tambah Jenis</button>
+      <button class="ba" onclick="addRow('mri')">➕ Tambah Jenis</button>
     </div>
   </div>
 
   <!-- D. USG -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">📡</div>
-      <div>
-        <div class="section-title">D. USG</div>
-        <div class="section-subtitle">Ultrasonografi</div>
+  <div class="sc">
+    <div class="sh"><div class="si">📡</div><div><div class="st">D. USG</div><div class="ss">Sub-total & total otomatis dari P4+P3+Asuransi</div></div></div>
+    <div class="sb">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:var(--blue-light);border-radius:var(--rs);padding:10px 14px;border:1px solid var(--blue-mid)">
+        <span style="font-size:.8rem;font-weight:700;color:var(--blue)">⚡ JUMLAH TOTAL USG (Auto):</span>
+        <input type="number" id="usg_total" class="auto" readonly placeholder="0" style="width:90px;padding:7px 11px;border:1.5px solid var(--blue-mid);border-radius:8px;background:#fff;font-weight:800;font-size:1.1rem;color:var(--blue-deeper);text-align:center">
       </div>
-    </div>
-    <div class="section-body">
-      <div class="form-row" style="max-width:200px">
-        <div class="form-group">
-          <label>Jumlah Total</label>
-          <input type="number" id="usg_total" min="0" placeholder="0">
-        </div>
-      </div>
-      <div id="usg_dist">
-        <div class="dist-block">
-          <div class="dist-label">Klinik</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_kl" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="usg_kl_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="usg_kl_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_kl_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">Ranap</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_rn" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="usg_rn_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="usg_rn_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_rn_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">IGD</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_igd" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="usg_igd_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="usg_igd_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_igd_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-        <div class="dist-block">
-          <div class="dist-label">Luar</div>
-          <div class="dist-grid">
-            <div class="form-group"><label>Jumlah</label><input type="number" id="usg_lr" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P4</label><input type="number" id="usg_lr_p4" min="0" placeholder="0"></div>
-            <div class="form-group"><label>P3</label><input type="number" id="usg_lr_p3" min="0" placeholder="0"></div>
-            <div class="form-group"><label>Asuransi</label><input type="number" id="usg_lr_ass" min="0" placeholder="0"></div>
-          </div>
-        </div>
-      </div>
-      <div style="font-weight:700;font-size:.85rem;color:var(--text);margin:20px 0 10px;">Rincian Jenis Pemeriksaan USG</div>
+      <div class="db"><div class="dl">Klinik</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="usg_kl" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="usg_kl_p4" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="usg_kl_p3" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="usg_kl_ass" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+      </div></div>
+      <div class="db"><div class="dl">Ranap</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="usg_rn" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="usg_rn_p4" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="usg_rn_p3" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="usg_rn_ass" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+      </div></div>
+      <div class="db"><div class="dl">IGD</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="usg_igd" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="usg_igd_p4" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="usg_igd_p3" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="usg_igd_ass" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+      </div></div>
+      <div class="db"><div class="dl">Luar</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="usg_lr" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="usg_lr_p4" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="usg_lr_p3" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="usg_lr_ass" min="0" placeholder="0" oninput="calcDist('usg')"></div>
+      </div></div>
+      <div class="slbl">Rincian Jenis Pemeriksaan USG</div>
       <div id="usg_types"></div>
-      <button class="btn-add" onclick="addTypeRow('usg')">➕ Tambah Jenis</button>
+      <button class="ba" onclick="addRow('usg')">➕ Tambah Jenis</button>
     </div>
   </div>
 
-  <!-- E. PEMERIKSAAN LAIN -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">⚕️</div>
-      <div>
-        <div class="section-title">E. Pemeriksaan Lain</div>
-        <div class="section-subtitle">Panoramic, C-Arm, Cathlab</div>
-      </div>
+  <!-- E. LAIN -->
+  <div class="sc">
+    <div class="sh"><div class="si">⚕️</div><div><div class="st">E. Pemeriksaan Lain</div><div class="ss">Sub-total otomatis Panoramic, C-Arm, Cathlab</div></div></div>
+    <div class="sb">
+      <div class="db"><div class="dl">Panoramic</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="pan_total" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="pan_p4" min="0" placeholder="0" oninput="calcLain('pan')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="pan_p3" min="0" placeholder="0" oninput="calcLain('pan')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="pan_ass" min="0" placeholder="0" oninput="calcLain('pan')"></div>
+      </div></div>
+      <div class="db"><div class="dl">C-Arm</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="carm_total" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="carm_p4" min="0" placeholder="0" oninput="calcLain('carm')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="carm_p3" min="0" placeholder="0" oninput="calcLain('carm')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="carm_ass" min="0" placeholder="0" oninput="calcLain('carm')"></div>
+      </div></div>
+      <div class="db"><div class="dl">Cathlab</div><div class="dg">
+        <div class="fg"><label class="al">⚡ Sub-Total</label><input type="number" id="cath_total" class="auto" readonly placeholder="0"></div>
+        <div class="fg"><label>P4</label><input type="number" id="cath_p4" min="0" placeholder="0" oninput="calcLain('cath')"></div>
+        <div class="fg"><label>P3</label><input type="number" id="cath_p3" min="0" placeholder="0" oninput="calcLain('cath')"></div>
+        <div class="fg"><label>Asuransi</label><input type="number" id="cath_ass" min="0" placeholder="0" oninput="calcLain('cath')"></div>
+      </div></div>
     </div>
-    <div class="section-body">
-      <div class="dist-block">
-        <div class="dist-label">Panoramic</div>
-        <div class="dist-grid">
-          <div class="form-group"><label>Jumlah</label><input type="number" id="pan_total" min="0" placeholder="0"></div>
-          <div class="form-group"><label>P4</label><input type="number" id="pan_p4" min="0" placeholder="0"></div>
-          <div class="form-group"><label>P3</label><input type="number" id="pan_p3" min="0" placeholder="0"></div>
-          <div class="form-group"><label>Asuransi</label><input type="number" id="pan_ass" min="0" placeholder="0"></div>
-        </div>
-      </div>
-      <div class="dist-block">
-        <div class="dist-label">C-Arm</div>
-        <div class="dist-grid">
-          <div class="form-group"><label>Jumlah</label><input type="number" id="carm_total" min="0" placeholder="0"></div>
-          <div class="form-group"><label>P4</label><input type="number" id="carm_p4" min="0" placeholder="0"></div>
-          <div class="form-group"><label>P3</label><input type="number" id="carm_p3" min="0" placeholder="0"></div>
-          <div class="form-group"><label>Asuransi</label><input type="number" id="carm_ass" min="0" placeholder="0"></div>
-        </div>
-      </div>
-      <div class="dist-block">
-        <div class="dist-label">Cathlab</div>
-        <div class="dist-grid">
-          <div class="form-group"><label>Jumlah</label><input type="number" id="cath_total" min="0" placeholder="0"></div>
-          <div class="form-group"><label>P4</label><input type="number" id="cath_p4" min="0" placeholder="0"></div>
-          <div class="form-group"><label>P3</label><input type="number" id="cath_p3" min="0" placeholder="0"></div>
-          <div class="form-group"><label>Asuransi</label><input type="number" id="cath_ass" min="0" placeholder="0"></div>
-        </div>
+  </div>
+
+  <!-- F. PELAYANAN -->
+  <div class="sc">
+    <div class="sh"><div class="si">🌙</div><div><div class="st">F. Pelayanan Khusus</div><div class="ss">Laporan malam & order IGD tidak terkirim</div></div></div>
+    <div class="sb">
+      <div class="fr">
+        <div class="fg"><label>Laporan Malam (21.00–07.00)</label><input type="number" id="lap_malam" min="0" placeholder="0"></div>
+        <div class="fg"><label>Order IGD Tidak Terkirim</label><input type="number" id="order_igd" min="0" placeholder="0"></div>
       </div>
     </div>
   </div>
 
-  <!-- F. PELAYANAN KHUSUS -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">🌙</div>
-      <div>
-        <div class="section-title">F. Pelayanan Khusus</div>
-        <div class="section-subtitle">Laporan malam & order IGD</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Laporan Malam (21.00–07.00)</label>
-          <input type="number" id="lap_malam" min="0" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>Order IGD Tidak Terkirim</label>
-          <input type="number" id="order_igd" min="0" placeholder="0">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- G. INDIKATOR MUTU -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">📈</div>
-      <div>
-        <div class="section-title">G. Indikator Mutu Radiologi</div>
-        <div class="section-subtitle">26 indikator mutu pelayanan</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div style="overflow-x:auto;">
-        <table class="indicator-table">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Indikator</th>
-              <th>Target</th>
-              <th>Capaian</th>
-              <th>Satuan</th>
-            </tr>
-          </thead>
-          <tbody id="indicatorBody"></tbody>
-        </table>
+  <!-- G. INDIKATOR -->
+  <div class="sc">
+    <div class="sh"><div class="si">📈</div><div><div class="st">G. Indikator Mutu Radiologi</div><div class="ss">26 indikator — Rekap otomatis dihitung</div></div></div>
+    <div class="sb">
+      <div style="overflow-x:auto">
+        <table class="it"><thead><tr><th>No</th><th>Indikator</th><th>Target</th><th>Capaian</th><th>Satuan</th></tr></thead>
+        <tbody id="indBody"></tbody></table>
       </div>
     </div>
   </div>
 
   <!-- H. REKAP -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">📊</div>
-      <div>
-        <div class="section-title">H. Rekap Indikator</div>
-        <div class="section-subtitle">Otomatis dihitung</div>
+  <div class="sc">
+    <div class="sh"><div class="si">📊</div><div><div class="st">H. Rekap Indikator</div><div class="ss">⚡ Otomatis dihitung saat Anda mengisi indikator</div></div></div>
+    <div class="sb">
+      <div class="rb">
+        <div class="rs"><div class="num" id="rekTer">0</div><div class="lbl">Indikator Tercapai</div></div>
+        <div class="rs"><div class="num">26</div><div class="lbl">Total Indikator</div></div>
+        <div class="rs"><div class="num" id="rekPct">0%</div><div class="lbl">Persentase Capaian</div></div>
       </div>
-    </div>
-    <div class="section-body">
-      <div class="rekap-box">
-        <div class="rekap-stat">
-          <div class="num" id="rekap_tercapai">—</div>
-          <div class="lbl">Tercapai</div>
-        </div>
-        <div class="rekap-divider"></div>
-        <div class="rekap-stat">
-          <div class="num">26</div>
-          <div class="lbl">Total Indikator</div>
-        </div>
-        <div class="rekap-divider"></div>
-        <div class="rekap-stat">
-          <div class="num" id="rekap_persen">—</div>
-          <div class="lbl">% Capaian</div>
-        </div>
-      </div>
-      <div style="margin-top:16px;">
-        <div class="form-group" style="max-width:320px;">
-          <label>I. Keterlambatan Karyawan</label>
-          <input type="text" id="terlambat" placeholder="Nama / jumlah...">
-        </div>
-      </div>
+      <div style="margin-top:16px"><div class="fg" style="max-width:340px">
+        <label>I. Keterlambatan Karyawan</label>
+        <input type="text" id="terlambat" placeholder="Nama / jumlah karyawan...">
+      </div></div>
     </div>
   </div>
 
-  <!-- ACTIONS -->
-  <div class="action-bar">
-    <button class="btn btn-primary" onclick="simpanLaporan()">
-      💾 Simpan ke Firebase
-    </button>
-    <button class="btn btn-wa" onclick="kirimWA()">
-      📲 Kirim WhatsApp
-    </button>
-    <button class="btn btn-outline" onclick="resetForm()">
-      🔄 Reset Form
-    </button>
+  <div class="ab">
+    <button class="btn bp" id="btnSimpan" onclick="simpan()">💾 Simpan ke Firebase</button>
+    <button class="btn bw" onclick="kirimWA()">📲 Kirim WhatsApp</button>
+    <button class="btn bo" onclick="resetForm()">🔄 Reset Form</button>
   </div>
 
-</div><!-- /container -->
-</div><!-- /page-form -->
+</div></div>
 
-<!-- ═══════════════ PAGE: DASHBOARD ═══════════════ -->
+<!-- ════════ DASHBOARD PAGE ════════ -->
 <div id="page-dashboard" class="page">
-<div class="container">
-
+<div class="wrap">
   <div class="hero">
     <h1>📊 Dashboard Radiologi</h1>
     <p>Ringkasan & Riwayat Laporan Harian</p>
-    <div class="hero-date" id="dashDate">—</div>
+    <div class="hd" id="dashDate">—</div>
   </div>
-
-  <!-- Summary cards -->
-  <div class="dash-grid" id="dashCards">
-    <div class="dash-card">
-      <div class="card-icon">📁</div>
-      <div class="card-num" id="d_total_laporan">—</div>
-      <div class="card-label">Total Laporan Tersimpan</div>
-    </div>
-    <div class="dash-card">
-      <div class="card-icon">🩻</div>
-      <div class="card-num" id="d_avg_rontgen">—</div>
-      <div class="card-label">Rata-rata Rontgen/Hari</div>
-    </div>
-    <div class="dash-card">
-      <div class="card-icon">🔬</div>
-      <div class="card-num" id="d_avg_ct">—</div>
-      <div class="card-label">Rata-rata CT Scan/Hari</div>
-    </div>
-    <div class="dash-card">
-      <div class="card-icon">🧲</div>
-      <div class="card-num" id="d_avg_mri">—</div>
-      <div class="card-label">Rata-rata MRI/Hari</div>
-    </div>
-    <div class="dash-card">
-      <div class="card-icon">📡</div>
-      <div class="card-num" id="d_avg_usg">—</div>
-      <div class="card-label">Rata-rata USG/Hari</div>
-    </div>
-    <div class="dash-card">
-      <div class="card-icon">📈</div>
-      <div class="card-num" id="d_avg_capaian">—</div>
-      <div class="card-label">Rata-rata Capaian Mutu</div>
-    </div>
+  <div class="dg2">
+    <div class="dcard"><div class="ci">📁</div><div class="cn" id="d_tot">—</div><div class="cl">Total Laporan</div></div>
+    <div class="dcard"><div class="ci">🩻</div><div class="cn" id="d_rn">—</div><div class="cl">Rata-rata Rontgen/Hari</div></div>
+    <div class="dcard"><div class="ci">🔬</div><div class="cn" id="d_ct">—</div><div class="cl">Rata-rata CT/Hari</div></div>
+    <div class="dcard"><div class="ci">🧲</div><div class="cn" id="d_mr">—</div><div class="cl">Rata-rata MRI/Hari</div></div>
+    <div class="dcard"><div class="ci">📡</div><div class="cn" id="d_ug">—</div><div class="cl">Rata-rata USG/Hari</div></div>
+    <div class="dcard"><div class="ci">📈</div><div class="cn" id="d_cp">—</div><div class="cl">Rata-rata Capaian Mutu</div></div>
   </div>
-
-  <!-- History -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon">📂</div>
-      <div>
-        <div class="section-title">Riwayat Laporan</div>
-        <div class="section-subtitle">Semua laporan tersimpan</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div style="overflow-x:auto;">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Rontgen</th>
-              <th>CT Scan</th>
-              <th>MRI</th>
-              <th>USG</th>
-              <th>Capaian Mutu</th>
-              <th>Dibuat Oleh</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="historyBody">
-            <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px;">Memuat data...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div class="sc">
+    <div class="sh"><div class="si">📂</div><div><div class="st">Riwayat Laporan</div><div class="ss">Data dari Firebase Realtime Database</div></div></div>
+    <div class="sb"><div style="overflow-x:auto">
+      <table class="ht">
+        <thead><tr><th>Tanggal</th><th>Rontgen</th><th>CT</th><th>MRI</th><th>USG</th><th>Capaian</th><th>Dibuat</th><th>Aksi</th></tr></thead>
+        <tbody id="histBody"><tr><td colspan="8" style="text-align:center;padding:28px;color:var(--g500)">Memuat data...</td></tr></tbody>
+      </table>
+    </div></div>
   </div>
+  <button class="btn bk" onclick="loadDash()" style="margin-top:14px">🔄 Refresh Data</button>
+</div></div>
 
-  <button class="btn btn-primary" onclick="loadDashboard()" style="margin-top:16px;">🔄 Refresh Data</button>
-</div>
-</div><!-- /page-dashboard -->
-
-<!-- MODAL DETAIL -->
-<div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+<!-- MODAL -->
+<div class="mo" id="detModal" onclick="closeMo(event)">
   <div class="modal">
     <h2>📋 Detail Laporan</h2>
-    <pre id="modalContent"></pre>
-    <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('active')">✕ Tutup</button>
+    <pre id="moContent"></pre>
+    <button class="mc" onclick="document.getElementById('detModal').classList.remove('active')">✕ Tutup</button>
   </div>
 </div>
 
-<!-- Firebase + App Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyADP3wRV5au67aPOC6NFzT7bDQQ7dYLDks",
-  authDomain: "laporan-day-rad.firebaseapp.com",
-  databaseURL: "https://laporan-day-rad-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "laporan-day-rad",
-  storageBucket: "laporan-day-rad.firebasestorage.app",
-  messagingSenderId: "591002194447",
-  appId: "1:591002194447:web:8b565c3d90eabee5e8497a",
-  measurementId: "G-8ENQNZ31QH"
-};
-
-const app = initializeApp(firebaseConfig);
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const app = initializeApp({
+  apiKey:"AIzaSyADP3wRV5au67aPOC6NFzT7bDQQ7dYLDks",
+  authDomain:"laporan-day-rad.firebaseapp.com",
+  databaseURL:"https://laporan-day-rad-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"laporan-day-rad",
+  storageBucket:"laporan-day-rad.firebasestorage.app",
+  messagingSenderId:"591002194447",
+  appId:"1:591002194447:web:8b565c3d90eabee5e8497a"
+});
 const db = getDatabase(app);
 
-// Indicators definition
-const indicators = [
-  { no:1,  label:"Respon time bedah ≤ 60 menit",      target:"100%",  satuan:"%" },
-  { no:2,  label:"Waktu tunggu Cito ≤ 30 menit",       target:"100%",  satuan:"%" },
-  { no:3,  label:"Expertise kritis ≤ 30 menit",        target:"100%",  satuan:"%" },
-  { no:4,  label:"Upload foto IGD ≤ 10 menit",         target:"≥90%",  satuan:"%" },
-  { no:5,  label:"Pengulangan pemeriksaan",             target:"≤5%",   satuan:"%" },
-  { no:6,  label:"CT Scan non kontras ≤120 menit",     target:"≥90%",  satuan:"%" },
-  { no:7,  label:"MRI non kontras ≤180 menit",         target:"≥90%",  satuan:"%" },
-  { no:8,  label:"Thorax poliklinik ≤40 menit",        target:"≤40 mnt",satuan:"Menit" },
-  { no:9,  label:"Keterlambatan thorax ≥30 mnt",       target:"≤20%",  satuan:"%" },
-  { no:10, label:"USG Abdomen ≤30 menit",              target:"≤30 mnt",satuan:"Menit" },
-  { no:11, label:"Keterlambatan USG ≥30 mnt",          target:"≤20%",  satuan:"%" },
-  { no:12, label:"Panoramic ≤120 menit",               target:"≤120 mnt",satuan:"Menit" },
-  { no:13, label:"Keterlambatan panoramic",            target:"≤20%",  satuan:"%" },
-  { no:14, label:"Upload CT kontras ≤60 menit",        target:"≥90%",  satuan:"%" },
-  { no:15, label:"Upload CT non kontras ≤30 menit",    target:"≥90%",  satuan:"%" },
-  { no:16, label:"Upload MRI kontras ≤60 menit",       target:"≥90%",  satuan:"%" },
-  { no:17, label:"Upload MRI non kontras ≤30 menit",   target:"≥90%",  satuan:"%" },
-  { no:18, label:"Kerusakan alat",                     target:"≤5%",   satuan:"%" },
-  { no:19, label:"Kepatuhan hand hygiene",             target:"100%",  satuan:"%" },
-  { no:20, label:"Identifikasi pasien",                target:"100%",  satuan:"%" },
-  { no:21, label:"Penggunaan APD",                     target:"100%",  satuan:"%" },
-  { no:22, label:"Kesalahan pemeriksaan",              target:"0",     satuan:"" },
-  { no:23, label:"Pasien jatuh",                       target:"0",     satuan:"" },
-  { no:24, label:"Kegagalan PME",                      target:"0",     satuan:"" },
-  { no:25, label:"Kegagalan PMI",                      target:"0",     satuan:"" },
-  { no:26, label:"Komplain pasien",                    target:"0",     satuan:"" },
+const IND = [
+  {no:1,label:"Respon time bedah ≤ 60 menit",target:"100%",s:"%"},
+  {no:2,label:"Waktu tunggu Cito ≤ 30 menit",target:"100%",s:"%"},
+  {no:3,label:"Expertise kritis ≤ 30 menit",target:"100%",s:"%"},
+  {no:4,label:"Upload foto IGD ≤ 10 menit",target:"≥90%",s:"%"},
+  {no:5,label:"Pengulangan pemeriksaan",target:"≤5%",s:"%"},
+  {no:6,label:"CT Scan non kontras ≤120 menit",target:"≥90%",s:"%"},
+  {no:7,label:"MRI non kontras ≤180 menit",target:"≥90%",s:"%"},
+  {no:8,label:"Thorax poliklinik ≤40 menit",target:"≤40 mnt",s:"Menit"},
+  {no:9,label:"Keterlambatan thorax ≥30 mnt",target:"≤20%",s:"%"},
+  {no:10,label:"USG Abdomen ≤30 menit",target:"≤30 mnt",s:"Menit"},
+  {no:11,label:"Keterlambatan USG ≥30 mnt",target:"≤20%",s:"%"},
+  {no:12,label:"Panoramic ≤120 menit",target:"≤120 mnt",s:"Menit"},
+  {no:13,label:"Keterlambatan panoramic",target:"≤20%",s:"%"},
+  {no:14,label:"Upload CT kontras ≤60 menit",target:"≥90%",s:"%"},
+  {no:15,label:"Upload CT non kontras ≤30 menit",target:"≥90%",s:"%"},
+  {no:16,label:"Upload MRI kontras ≤60 menit",target:"≥90%",s:"%"},
+  {no:17,label:"Upload MRI non kontras ≤30 menit",target:"≥90%",s:"%"},
+  {no:18,label:"Kerusakan alat",target:"≤5%",s:"%"},
+  {no:19,label:"Kepatuhan hand hygiene",target:"100%",s:"%"},
+  {no:20,label:"Identifikasi pasien",target:"100%",s:"%"},
+  {no:21,label:"Penggunaan APD",target:"100%",s:"%"},
+  {no:22,label:"Kesalahan pemeriksaan",target:"0",s:""},
+  {no:23,label:"Pasien jatuh",target:"0",s:""},
+  {no:24,label:"Kegagalan PME",target:"0",s:""},
+  {no:25,label:"Kegagalan PMI",target:"0",s:""},
+  {no:26,label:"Komplain pasien",target:"0",s:""},
 ];
 
-// Build indicator table
-function buildIndicators() {
-  const tbody = document.getElementById('indicatorBody');
-  tbody.innerHTML = indicators.map(ind => `
+function buildInd() {
+  document.getElementById('indBody').innerHTML = IND.map(i=>`
     <tr>
-      <td><strong>${ind.no}</strong></td>
-      <td>${ind.label}</td>
-      <td><span class="badge badge-orange">${ind.target}</span></td>
-      <td><input type="number" id="ind_${ind.no}" min="0" step="0.1" placeholder="—" oninput="calcRekap()"></td>
-      <td><span style="color:var(--text-muted);font-size:.8rem;">${ind.satuan}</span></td>
-    </tr>
-  `).join('');
+      <td><strong>${i.no}</strong></td>
+      <td>${i.label}</td>
+      <td><span class="badge bb">${i.target}</span></td>
+      <td><input type="number" id="i${i.no}" min="0" step="0.1" placeholder="—" oninput="calcRekap()"></td>
+      <td style="color:var(--g500);font-size:.77rem">${i.s}</td>
+    </tr>`).join('');
 }
 
-// Collect form data
-function collectData() {
-  // CT types
-  const ctTypes = [];
-  document.querySelectorAll('#ct_types .dynamic-row').forEach(r => {
-    const inputs = r.querySelectorAll('input');
-    if (inputs[0].value) ctTypes.push({ jenis: inputs[0].value, jumlah: inputs[1].value || 0 });
+// ── AUTO CALC FUNCTIONS ──
+window.calcRontgen = () => {
+  const s = n('rntg_p4')+n('rntg_p3')+n('rntg_ass')+n('rntg_mcu');
+  sv('rntg_total', s);
+};
+window.calcDist = (pfx) => {
+  const rows = pfx==='ct' ? ['kl','rn','igd'] : ['kl','rn','igd','lr'];
+  let grand = 0;
+  rows.forEach(r => {
+    const sub = n(`${pfx}_${r}_p4`)+n(`${pfx}_${r}_p3`)+n(`${pfx}_${r}_ass`);
+    sv(`${pfx}_${r}`, sub);
+    grand += sub;
   });
-  const mriTypes = [];
-  document.querySelectorAll('#mri_types .dynamic-row').forEach(r => {
-    const inputs = r.querySelectorAll('input');
-    if (inputs[0].value) mriTypes.push({ jenis: inputs[0].value, jumlah: inputs[1].value || 0 });
-  });
-  const usgTypes = [];
-  document.querySelectorAll('#usg_types .dynamic-row').forEach(r => {
-    const inputs = r.querySelectorAll('input');
-    if (inputs[0].value) usgTypes.push({ jenis: inputs[0].value, jumlah: inputs[1].value || 0 });
-  });
+  sv(`${pfx}_total`, grand);
+};
+window.calcLain = (pfx) => sv(`${pfx}_total`, n(`${pfx}_p4`)+n(`${pfx}_p3`)+n(`${pfx}_ass`));
+window.calcRekap = () => {
+  let ter = 0;
+  IND.forEach(i => { const el = document.getElementById('i'+i.no); if(el && el.value!=='') ter++; });
+  document.getElementById('rekTer').textContent = ter;
+  document.getElementById('rekPct').textContent = Math.round((ter/26)*100)+'%';
+};
 
-  const indCapaian = {};
-  indicators.forEach(ind => {
-    indCapaian[`ind_${ind.no}`] = v(`ind_${ind.no}`);
-  });
+// helpers
+function n(id) { return parseFloat(document.getElementById(id)?.value||0)||0; }
+function sv(id, val) { const e=document.getElementById(id); if(e) e.value=val; }
+function gv(id) { return document.getElementById(id)?.value||0; }
+function gt(id) { return document.getElementById(id)?.value||''; }
 
-  const tercapai = parseInt(document.getElementById('rekap_tercapai').textContent) || 0;
-  const persen = document.getElementById('rekap_persen').textContent;
-
+// ── COLLECT ──
+function collect() {
+  const getTypes = p => {
+    const a=[];
+    document.querySelectorAll(`#${p}_types .dr`).forEach(r=>{
+      const ins=r.querySelectorAll('input');
+      if(ins[0]?.value) a.push({jenis:ins[0].value,jumlah:ins[1]?.value||0});
+    });
+    return a;
+  };
+  const ind={};
+  IND.forEach(i => ind[i.no]=gv('i'+i.no));
   return {
-    tanggal: document.getElementById('tglInput').value,
-    nama: document.getElementById('namaInput').value,
-    gelar: document.getElementById('gelarInput').value,
-    rontgen: {
-      total: v('rntg_total'), p4: v('rntg_p4'), p3: v('rntg_p3'),
-      asuransi: v('rntg_ass'), mcu: v('rntg_mcu')
-    },
-    ct: {
-      total: v('ct_total'),
-      klinik: { jml: v('ct_kl'), p4: v('ct_kl_p4'), p3: v('ct_kl_p3'), ass: v('ct_kl_ass') },
-      ranap:  { jml: v('ct_rn'), p4: v('ct_rn_p4'), p3: v('ct_rn_p3'), ass: v('ct_rn_ass') },
-      igd:    { jml: v('ct_igd'), p4: v('ct_igd_p4'), p3: v('ct_igd_p3'), ass: v('ct_igd_ass') },
-      types: ctTypes
-    },
-    mri: {
-      total: v('mri_total'),
-      klinik: { jml: v('mri_kl'), p4: v('mri_kl_p4'), p3: v('mri_kl_p3'), ass: v('mri_kl_ass') },
-      ranap:  { jml: v('mri_rn'), p4: v('mri_rn_p4'), p3: v('mri_rn_p3'), ass: v('mri_rn_ass') },
-      igd:    { jml: v('mri_igd'), p4: v('mri_igd_p4'), p3: v('mri_igd_p3'), ass: v('mri_igd_ass') },
-      luar:   { jml: v('mri_lr'), p4: v('mri_lr_p4'), p3: v('mri_lr_p3'), ass: v('mri_lr_ass') },
-      types: mriTypes
-    },
-    usg: {
-      total: v('usg_total'),
-      klinik: { jml: v('usg_kl'), p4: v('usg_kl_p4'), p3: v('usg_kl_p3'), ass: v('usg_kl_ass') },
-      ranap:  { jml: v('usg_rn'), p4: v('usg_rn_p4'), p3: v('usg_rn_p3'), ass: v('usg_rn_ass') },
-      igd:    { jml: v('usg_igd'), p4: v('usg_igd_p4'), p3: v('usg_igd_p3'), ass: v('usg_igd_ass') },
-      luar:   { jml: v('usg_lr'), p4: v('usg_lr_p4'), p3: v('usg_lr_p3'), ass: v('usg_lr_ass') },
-      types: usgTypes
-    },
-    lain: {
-      panoramic: { total: v('pan_total'), p4: v('pan_p4'), p3: v('pan_p3'), ass: v('pan_ass') },
-      carm:      { total: v('carm_total'), p4: v('carm_p4'), p3: v('carm_p3'), ass: v('carm_ass') },
-      cathlab:   { total: v('cath_total'), p4: v('cath_p4'), p3: v('cath_p3'), ass: v('cath_ass') }
-    },
-    pelayanan: {
-      laporan_malam: v('lap_malam'),
-      order_igd_gagal: v('order_igd')
-    },
-    indikator: indCapaian,
-    rekap: { tercapai, total: 26, persen },
-    lainnya: { keterlambatan_karyawan: document.getElementById('terlambat').value },
-    timestamp: Date.now()
+    tanggal:gt('tglInput'), nama:gt('namaInput'), gelar:gt('gelarInput'),
+    rontgen:{total:gv('rntg_total'),p4:gv('rntg_p4'),p3:gv('rntg_p3'),ass:gv('rntg_ass'),mcu:gv('rntg_mcu')},
+    ct:{total:gv('ct_total'),
+      klinik:{jml:gv('ct_kl'),p4:gv('ct_kl_p4'),p3:gv('ct_kl_p3'),ass:gv('ct_kl_ass')},
+      ranap: {jml:gv('ct_rn'),p4:gv('ct_rn_p4'),p3:gv('ct_rn_p3'),ass:gv('ct_rn_ass')},
+      igd:   {jml:gv('ct_igd'),p4:gv('ct_igd_p4'),p3:gv('ct_igd_p3'),ass:gv('ct_igd_ass')},
+      types:getTypes('ct')},
+    mri:{total:gv('mri_total'),
+      klinik:{jml:gv('mri_kl'),p4:gv('mri_kl_p4'),p3:gv('mri_kl_p3'),ass:gv('mri_kl_ass')},
+      ranap: {jml:gv('mri_rn'),p4:gv('mri_rn_p4'),p3:gv('mri_rn_p3'),ass:gv('mri_rn_ass')},
+      igd:   {jml:gv('mri_igd'),p4:gv('mri_igd_p4'),p3:gv('mri_igd_p3'),ass:gv('mri_igd_ass')},
+      luar:  {jml:gv('mri_lr'),p4:gv('mri_lr_p4'),p3:gv('mri_lr_p3'),ass:gv('mri_lr_ass')},
+      types:getTypes('mri')},
+    usg:{total:gv('usg_total'),
+      klinik:{jml:gv('usg_kl'),p4:gv('usg_kl_p4'),p3:gv('usg_kl_p3'),ass:gv('usg_kl_ass')},
+      ranap: {jml:gv('usg_rn'),p4:gv('usg_rn_p4'),p3:gv('usg_rn_p3'),ass:gv('usg_rn_ass')},
+      igd:   {jml:gv('usg_igd'),p4:gv('usg_igd_p4'),p3:gv('usg_igd_p3'),ass:gv('usg_igd_ass')},
+      luar:  {jml:gv('usg_lr'),p4:gv('usg_lr_p4'),p3:gv('usg_lr_p3'),ass:gv('usg_lr_ass')},
+      types:getTypes('usg')},
+    lain:{
+      panoramic:{total:gv('pan_total'),p4:gv('pan_p4'),p3:gv('pan_p3'),ass:gv('pan_ass')},
+      carm:     {total:gv('carm_total'),p4:gv('carm_p4'),p3:gv('carm_p3'),ass:gv('carm_ass')},
+      cathlab:  {total:gv('cath_total'),p4:gv('cath_p4'),p3:gv('cath_p3'),ass:gv('cath_ass')}},
+    pelayanan:{malam:gv('lap_malam'),igd_gagal:gv('order_igd')},
+    indikator:ind,
+    rekap:{tercapai:parseInt(document.getElementById('rekTer').textContent)||0,total:26,persen:document.getElementById('rekPct').textContent},
+    lainnya:{terlambat:gt('terlambat')},
+    timestamp:Date.now()
   };
 }
 
-function v(id) {
-  const el = document.getElementById(id);
-  return el ? (el.value || 0) : 0;
-}
-
-// Save to Firebase
-window.simpanLaporan = async function() {
-  const tgl = document.getElementById('tglInput').value;
-  if (!tgl) { showToast('Pilih tanggal terlebih dahulu!', 'error'); return; }
-  const btn = document.querySelector('.btn-primary');
-  const orig = btn.innerHTML;
-  btn.innerHTML = '<span class="loader"></span> Menyimpan...';
-  btn.disabled = true;
-  try {
-    const data = collectData();
-    await push(ref(db, 'laporan'), data);
-    showToast('✅ Laporan berhasil disimpan ke Firebase!', 'success');
-  } catch(e) {
-    showToast('❌ Gagal simpan: ' + e.message, 'error');
-  } finally {
-    btn.innerHTML = orig; btn.disabled = false;
-  }
+// ── SAVE ──
+window.simpan = async () => {
+  if(!gt('tglInput')){toast('Pilih tanggal!','error');return;}
+  const btn=document.getElementById('btnSimpan');
+  btn.innerHTML='<span class="loader"></span> Menyimpan...'; btn.disabled=true;
+  try{ await push(ref(db,'laporan'),collect()); toast('✅ Berhasil disimpan ke Firebase!','success'); }
+  catch(e){ toast('❌ Gagal: '+e.message,'error'); }
+  finally{ btn.innerHTML='💾 Simpan ke Firebase'; btn.disabled=false; }
 };
 
-// WhatsApp
-window.kirimWA = function() {
-  const tgl = document.getElementById('tglInput').value;
-  if (!tgl) { showToast('Pilih tanggal terlebih dahulu!', 'error'); return; }
-  const d = collectData();
-  const dt = formatTanggal(tgl);
-  const nama = document.getElementById('namaInput').value || '(Petugas)';
-  const gelar = document.getElementById('gelarInput').value || '';
-
-  // Build CT types text
-  const ctTypesText = d.ct.types.length ? d.ct.types.map(t => `  • ${t.jenis}: ${t.jumlah}`).join('\n') : '  • -';
-  const mriTypesText = d.mri.types.length ? d.mri.types.map(t => `  • ${t.jenis}: ${t.jumlah}`).join('\n') : '  • -';
-  const usgTypesText = d.usg.types.length ? d.usg.types.map(t => `  • ${t.jenis}: ${t.jumlah}`).join('\n') : '  • -';
-
-  // Build indicator lines
-  const indLines = indicators.map(ind => {
-    const val = v(`ind_${ind.no}`);
-    return `${ind.no}. ${ind.label}: ${val}${ind.satuan}`;
-  }).join('\n');
-
-  const msg = `📊 *LAPORAN HARIAN RADIOLOGI*
+// ── WHATSAPP ──
+window.kirimWA = () => {
+  if(!gt('tglInput')){toast('Pilih tanggal!','error');return;}
+  const d=collect(), dt=ftgl(gt('tglInput'));
+  const nm=gt('namaInput')||'(Petugas)', gl=gt('gelarInput');
+  const T=p=>d[p]?.types?.length?d[p].types.map(x=>`  • ${x.jenis}: ${x.jumlah}`).join('\n'):'  • -';
+  const IL=IND.map(i=>`${i.no}. ${i.label}: ${gv('i'+i.no)}${i.s}`).join('\n');
+  const m=
+`📊 *LAPORAN HARIAN RADIOLOGI*
 Hari/Tanggal: ${dt}
 
 *A. PEMERIKSAAN RONTGEN*
@@ -1283,7 +600,7 @@ Jumlah: ${d.rontgen.total}
 Rincian:
 • P4: ${d.rontgen.p4}
 • P3: ${d.rontgen.p3}
-• Asuransi: ${d.rontgen.asuransi}
+• Asuransi: ${d.rontgen.ass}
 • MCU: ${d.rontgen.mcu}
 
 *B. CT SCAN*
@@ -1293,7 +610,7 @@ Distribusi:
 • Ranap: ${d.ct.ranap.jml} (P4: ${d.ct.ranap.p4} | P3: ${d.ct.ranap.p3} | Ass: ${d.ct.ranap.ass})
 • IGD: ${d.ct.igd.jml} (P4: ${d.ct.igd.p4} | P3: ${d.ct.igd.p3} | Ass: ${d.ct.igd.ass})
 Rincian:
-${ctTypesText}
+${T('ct')}
 
 *C. MRI*
 Jumlah: ${d.mri.total}
@@ -1303,7 +620,7 @@ Distribusi:
 • IGD: ${d.mri.igd.jml} (P4: ${d.mri.igd.p4} | P3: ${d.mri.igd.p3} | Ass: ${d.mri.igd.ass})
 • Luar: ${d.mri.luar.jml} (P4: ${d.mri.luar.p4} | P3: ${d.mri.luar.p3} | Ass: ${d.mri.luar.ass})
 Rincian:
-${mriTypesText}
+${T('mri')}
 
 *D. USG*
 Jumlah: ${d.usg.total}
@@ -1313,7 +630,7 @@ Distribusi:
 • IGD: ${d.usg.igd.jml} (P4: ${d.usg.igd.p4} | P3: ${d.usg.igd.p3} | Ass: ${d.usg.igd.ass})
 • Luar: ${d.usg.luar.jml} (P4: ${d.usg.luar.p4} | P3: ${d.usg.luar.p3} | Ass: ${d.usg.luar.ass})
 Rincian:
-${usgTypesText}
+${T('usg')}
 
 *E. PEMERIKSAAN LAIN*
 • Panoramic: ${d.lain.panoramic.total} (P4: ${d.lain.panoramic.p4} | P3: ${d.lain.panoramic.p3} | Ass: ${d.lain.panoramic.ass})
@@ -1321,11 +638,11 @@ ${usgTypesText}
 • Cathlab: ${d.lain.cathlab.total} (P4: ${d.lain.cathlab.p4} | P3: ${d.lain.cathlab.p3} | Ass: ${d.lain.cathlab.ass})
 
 *F. PELAYANAN KHUSUS*
-• Laporan malam (21.00–07.00): ${d.pelayanan.laporan_malam}
-• Order IGD tidak terkirim: ${d.pelayanan.order_igd_gagal}
+• Laporan malam (21.00–07.00): ${d.pelayanan.malam}
+• Order IGD tidak terkirim: ${d.pelayanan.igd_gagal}
 
 *G. INDIKATOR MUTU*
-${indLines}
+${IL}
 
 *H. REKAP INDIKATOR*
 • Tercapai: ${d.rekap.tercapai}
@@ -1333,170 +650,100 @@ ${indLines}
 • Capaian: ${d.rekap.persen}
 
 *I. LAIN-LAIN*
-• Keterlambatan karyawan: ${d.lainnya.keterlambatan_karyawan || '-'}
+• Keterlambatan karyawan: ${d.lainnya.terlambat||'-'}
 
 📍 Cirebon, ${dt}
 Dibuat oleh,
 TTD
-${nama}${gelar ? ' ' + gelar : ''}`;
-
-  const phone = '6208984290300';
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
-  showToast('📲 Membuka WhatsApp...', 'success');
+${nm}${gl?' '+gl:''}`;
+  window.open(`https://wa.me/6208984290300?text=${encodeURIComponent(m)}`,'_blank');
+  toast('📲 Membuka WhatsApp...','success');
 };
 
-// Load dashboard
-window.loadDashboard = function() {
-  const dbRef = ref(db, 'laporan');
-  onValue(dbRef, (snapshot) => {
-    const data = snapshot.val();
-    if (!data) {
-      document.getElementById('historyBody').innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px;">Belum ada laporan tersimpan.</td></tr>';
-      updateDashCards([], {});
-      return;
+// ── DASHBOARD ──
+window.loadDash = () => {
+  document.getElementById('histBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--g500)">Memuat...</td></tr>';
+  onValue(ref(db,'laporan'), snap => {
+    const raw=snap.val();
+    if(!raw){
+      document.getElementById('histBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--g500)">Belum ada data.</td></tr>';
+      updCards([]); return;
     }
-    const entries = Object.entries(data).map(([k, v]) => ({ id: k, ...v }))
-      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-    updateDashCards(entries, data);
-    renderHistory(entries);
-  }, { onlyOnce: true });
+    const ent=Object.entries(raw).map(([k,v])=>({id:k,...v})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    updCards(ent); renderHist(ent);
+  },{onlyOnce:true});
 };
-
-function updateDashCards(entries, _raw) {
-  document.getElementById('d_total_laporan').textContent = entries.length;
-  if (!entries.length) {
-    ['d_avg_rontgen','d_avg_ct','d_avg_mri','d_avg_usg','d_avg_capaian'].forEach(id => {
-      document.getElementById(id).textContent = '0';
-    });
-    return;
-  }
-  const avg = (fn) => Math.round(entries.reduce((s, e) => s + (parseFloat(fn(e)) || 0), 0) / entries.length);
-  document.getElementById('d_avg_rontgen').textContent = avg(e => e.rontgen?.total);
-  document.getElementById('d_avg_ct').textContent = avg(e => e.ct?.total);
-  document.getElementById('d_avg_mri').textContent = avg(e => e.mri?.total);
-  document.getElementById('d_avg_usg').textContent = avg(e => e.usg?.total);
-  const pctAvg = Math.round(entries.reduce((s, e) => {
-    const p = parseFloat((e.rekap?.persen || '0').replace('%',''));
-    return s + (isNaN(p) ? 0 : p);
-  }, 0) / entries.length);
-  document.getElementById('d_avg_capaian').textContent = pctAvg + '%';
+function updCards(e){
+  document.getElementById('d_tot').textContent=e.length;
+  if(!e.length){['d_rn','d_ct','d_mr','d_ug','d_cp'].forEach(i=>document.getElementById(i).textContent='0');return;}
+  const avg=f=>Math.round(e.reduce((s,x)=>s+(parseFloat(f(x))||0),0)/e.length);
+  document.getElementById('d_rn').textContent=avg(x=>x.rontgen?.total);
+  document.getElementById('d_ct').textContent=avg(x=>x.ct?.total);
+  document.getElementById('d_mr').textContent=avg(x=>x.mri?.total);
+  document.getElementById('d_ug').textContent=avg(x=>x.usg?.total);
+  const pa=Math.round(e.reduce((s,x)=>s+(parseFloat((x.rekap?.persen||'0').replace('%',''))||0),0)/e.length);
+  document.getElementById('d_cp').textContent=pa+'%';
 }
-
-function renderHistory(entries) {
-  if (!entries.length) {
-    document.getElementById('historyBody').innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px;">Belum ada data.</td></tr>';
-    return;
-  }
-  document.getElementById('historyBody').innerHTML = entries.map(e => `
+function renderHist(e){
+  if(!e.length){document.getElementById('histBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--g500)">Kosong.</td></tr>';return;}
+  document.getElementById('histBody').innerHTML=e.map(x=>`
     <tr>
-      <td><strong>${formatTanggal(e.tanggal) || '—'}</strong></td>
-      <td>${e.rontgen?.total || 0}</td>
-      <td>${e.ct?.total || 0}</td>
-      <td>${e.mri?.total || 0}</td>
-      <td>${e.usg?.total || 0}</td>
-      <td><span class="badge ${getBadgeClass(e.rekap?.persen)}">${e.rekap?.persen || '—'}</span></td>
-      <td>${e.nama || '—'}</td>
-      <td><button class="btn-detail" onclick='showDetail(${JSON.stringify(e)})'>Detail</button></td>
-    </tr>
-  `).join('');
+      <td><strong>${ftgl(x.tanggal)||'—'}</strong></td>
+      <td>${x.rontgen?.total||0}</td>
+      <td>${x.ct?.total||0}</td>
+      <td>${x.mri?.total||0}</td>
+      <td>${x.usg?.total||0}</td>
+      <td><span class="badge ${bc(x.rekap?.persen)}">${x.rekap?.persen||'—'}</span></td>
+      <td>${x.nama||'—'}</td>
+      <td><button class="bdet" onclick='showDet(${JSON.stringify(x)})'>Detail</button></td>
+    </tr>`).join('');
 }
+function bc(p){if(!p)return 'bb';const v=parseFloat(p);return v>=90?'bg':v>=70?'bb':'bd';}
+window.showDet=x=>{document.getElementById('moContent').textContent=JSON.stringify(x,null,2);document.getElementById('detModal').classList.add('active');};
+window.closeMo=ev=>{if(ev.target===document.getElementById('detModal'))document.getElementById('detModal').classList.remove('active');};
 
-function getBadgeClass(persen) {
-  if (!persen) return 'badge-orange';
-  const p = parseFloat(persen);
-  if (p >= 90) return 'badge-green';
-  if (p >= 70) return 'badge-orange';
-  return 'badge-red';
-}
-
-window.showDetail = function(e) {
-  document.getElementById('modalContent').textContent = JSON.stringify(e, null, 2);
-  document.getElementById('detailModal').classList.add('active');
+// ── MISC ──
+window.addRow = pfx => {
+  const c=document.getElementById(`${pfx}_types`);
+  const d=document.createElement('div'); d.className='dr';
+  d.innerHTML=`<input type="text" placeholder="Nama jenis pemeriksaan..." style="flex:2"><input type="number" placeholder="0" min="0" style="width:85px;flex:none"><button class="br" onclick="this.parentElement.remove()">✕</button>`;
+  c.appendChild(d);
 };
-
-window.closeModal = function(ev) {
-  if (ev.target === document.getElementById('detailModal'))
-    document.getElementById('detailModal').classList.remove('active');
+window.resetForm=()=>{
+  if(!confirm('Reset semua isian?'))return;
+  document.querySelectorAll('input[type=number]:not(.auto),input[type=text]').forEach(el=>el.value='');
+  document.querySelectorAll('input.auto').forEach(el=>el.value='');
+  document.getElementById('tglInput').value='';
+  document.getElementById('heroDate').textContent='—';
+  ['ct_types','mri_types','usg_types'].forEach(id=>document.getElementById(id).innerHTML='');
+  document.getElementById('rekTer').textContent='0';
+  document.getElementById('rekPct').textContent='0%';
+  toast('🔄 Form direset','success');
 };
-
-// ── HELPERS ──
-window.calcRontgenTotal = function() {}; // optional auto-sum
-
-window.calcRekap = function() {
-  let tercapai = 0;
-  indicators.forEach(ind => {
-    const val = parseFloat(v(`ind_${ind.no}`));
-    if (!isNaN(val) && val !== 0) tercapai++;
-  });
-  document.getElementById('rekap_tercapai').textContent = tercapai;
-  document.getElementById('rekap_persen').textContent = Math.round((tercapai / 26) * 100) + '%';
-};
-
-window.addTypeRow = function(prefix) {
-  const container = document.getElementById(`${prefix}_types`);
-  const div = document.createElement('div');
-  div.className = 'dynamic-row';
-  div.innerHTML = `
-    <input type="text" placeholder="Nama jenis pemeriksaan..." style="flex:2">
-    <input type="number" placeholder="0" min="0" style="width:90px;flex:none;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:DM Sans,sans-serif;font-size:.9rem;background:var(--bg);">
-    <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
-  `;
-  container.appendChild(div);
-};
-
-window.resetForm = function() {
-  if (!confirm('Reset semua isian form?')) return;
-  document.querySelectorAll('input[type=number], input[type=text]').forEach(el => el.value = '');
-  document.getElementById('tglInput').value = '';
-  document.getElementById('heroDate').textContent = '—';
-  ['ct_types','mri_types','usg_types'].forEach(id => document.getElementById(id).innerHTML = '');
-  document.getElementById('rekap_tercapai').textContent = '—';
-  document.getElementById('rekap_persen').textContent = '—';
-  showToast('🔄 Form direset', 'success');
-};
-
-window.showPage = function(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+window.showPage=name=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(`page-${name}`).classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.textContent.toLowerCase().includes(name === 'form' ? 'form' : 'dash')) b.classList.add('active');
-  });
-  if (name === 'dashboard') loadDashboard();
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b=>{if(b.textContent.toLowerCase().includes(name==='form'?'form':'dash'))b.classList.add('active');});
+  if(name==='dashboard')loadDash();
 };
-
-window.updateDate = function() {
-  const tgl = document.getElementById('tglInput').value;
-  document.getElementById('heroDate').textContent = tgl ? formatTanggal(tgl) : '—';
+window.updateDate=()=>{
+  const t=gt('tglInput');
+  document.getElementById('heroDate').textContent=t?ftgl(t):'—';
 };
-
-function formatTanggal(dateStr) {
-  if (!dateStr) return '—';
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+function ftgl(s){if(!s)return'—';return new Date(s+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show '+type;
+  setTimeout(()=>t.className='',3200);
 }
 
-window.showToast = function(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show ' + type;
-  setTimeout(() => { t.className = ''; }, 3000);
-};
-
-// Init
-buildIndicators();
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('tglInput').value = today;
-updateDate();
-document.getElementById('dashDate').textContent = new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-
-// Add default type rows
-addTypeRow('ct');
-addTypeRow('mri');
-addTypeRow('usg');
-
+// ── INIT ──
+buildInd();
+const today=new Date().toISOString().split('T')[0];
+document.getElementById('tglInput').value=today; updateDate();
+document.getElementById('dashDate').textContent=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+addRow('ct'); addRow('mri'); addRow('usg');
 </script>
 </body>
 </html>
