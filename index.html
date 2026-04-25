@@ -377,7 +377,7 @@ nav{background:var(--black);position:sticky;top:0;z-index:200;box-shadow:0 2px 1
 
   <!-- G. INDIKATOR -->
   <div class="sc">
-    <div class="sh"><div class="si">📈</div><div><div class="st">G. Indikator Mutu Radiologi</div><div class="ss">26 indikator — Rekap otomatis dihitung</div></div></div>
+    <div class="sh"><div class="si">📈</div><div><div class="st">G. Indikator Mutu Radiologi</div><div class="ss">25 indikator — Rekap otomatis dihitung</div></div></div>
     <div class="sb">
       <div style="overflow-x:auto">
         <table class="it"><thead><tr><th>No</th><th>Indikator</th><th>Target</th><th>Capaian</th><th>Satuan</th></tr></thead>
@@ -392,7 +392,7 @@ nav{background:var(--black);position:sticky;top:0;z-index:200;box-shadow:0 2px 1
     <div class="sb">
       <div class="rb">
         <div class="rs"><div class="num" id="rekTer">0</div><div class="lbl">Indikator Tercapai</div></div>
-        <div class="rs"><div class="num">26</div><div class="lbl">Total Indikator</div></div>
+        <div class="rs"><div class="num">25</div><div class="lbl">Total Indikator</div></div>
         <div class="rs"><div class="num" id="rekPct">0%</div><div class="lbl">Persentase Capaian</div></div>
       </div>
       <div style="margin-top:16px"><div class="fg" style="max-width:340px">
@@ -462,32 +462,31 @@ const app = initializeApp({
 const db = getDatabase(app);
 
 const IND = [
-  {no:1,label:"Respon time bedah ≤ 60 menit",target:"100%",s:"%"},
-  {no:2,label:"Waktu tunggu Cito ≤ 30 menit",target:"100%",s:"%"},
-  {no:3,label:"Expertise kritis ≤ 30 menit",target:"100%",s:"%"},
-  {no:4,label:"Upload foto IGD ≤ 10 menit",target:"≥90%",s:"%"},
-  {no:5,label:"Pengulangan pemeriksaan",target:"≤5%",s:"%"},
-  {no:6,label:"CT Scan non kontras ≤120 menit",target:"≥90%",s:"%"},
-  {no:7,label:"MRI non kontras ≤180 menit",target:"≥90%",s:"%"},
-  {no:8,label:"Thorax poliklinik ≤40 menit",target:"≤40 mnt",s:"Menit"},
-  {no:9,label:"Keterlambatan thorax ≥30 mnt",target:"≤20%",s:"%"},
-  {no:10,label:"USG Abdomen ≤30 menit",target:"≤30 mnt",s:"Menit"},
-  {no:11,label:"Keterlambatan USG ≥30 mnt",target:"≤20%",s:"%"},
-  {no:12,label:"Panoramic ≤120 menit",target:"≤120 mnt",s:"Menit"},
-  {no:13,label:"Keterlambatan panoramic",target:"≤20%",s:"%"},
-  {no:14,label:"Upload CT kontras ≤60 menit",target:"≥90%",s:"%"},
-  {no:15,label:"Upload CT non kontras ≤30 menit",target:"≥90%",s:"%"},
-  {no:16,label:"Upload MRI kontras ≤60 menit",target:"≥90%",s:"%"},
-  {no:17,label:"Upload MRI non kontras ≤30 menit",target:"≥90%",s:"%"},
-  {no:18,label:"Kerusakan alat",target:"≤5%",s:"%"},
-  {no:19,label:"Kepatuhan hand hygiene",target:"100%",s:"%"},
-  {no:20,label:"Identifikasi pasien",target:"100%",s:"%"},
-  {no:21,label:"Penggunaan APD",target:"100%",s:"%"},
-  {no:22,label:"Kesalahan pemeriksaan",target:"0",s:""},
-  {no:23,label:"Pasien jatuh",target:"0",s:""},
-  {no:24,label:"Kegagalan PME",target:"0",s:""},
-  {no:25,label:"Kegagalan PMI",target:"0",s:""},
-  {no:26,label:"Komplain pasien",target:"0",s:""},
+  {no:1,  label:"Waktu Tunggu Hasil Pemeriksaan Radiologi Pada Kasus Cito ≤ 30 Menit",                        target:"100%",   s:"%"},
+  {no:2,  label:"Waktu Tunggu Hasil Pelaporan Expertise Radiologi Kritis ≤ 30 Menit",                         target:"100%",   s:"%"},
+  {no:3,  label:"Respontime Pemeriksaan Radiologi Pada Kasus Bedah ≤ 60 Menit",                               target:"100%",   s:"%"},
+  {no:4,  label:"Waktu Tunggu Upload Foto Pasien Dari IGD ≤ 10 Menit",                                        target:"≤10 mnt",s:"menit"},
+  {no:5,  label:"Waktu Tunggu Hasil Pelayanan Thorax Photo Dari Poliklinik Target ≤ 30 Menit",                target:"≤30 mnt",s:"menit"},
+  {no:6,  label:"Prosentase Keterlambatan Rontgen Thorax Photo Dari Poliklinik ≥ 30 Menit",                   target:"≤20%",   s:"%"},
+  {no:7,  label:"Waktu Tunggu Hasil Pemeriksaan USG Abdomen Dari Poliklinik Target ≤ 30 Menit",              target:"≤30 mnt",s:"menit"},
+  {no:8,  label:"Prosentase Keterlambatan Pemeriksaan USG Abdomen Dari Poliklinik ≥ 30 Menit",               target:"≤20%",   s:"%"},
+  {no:9,  label:"Waktu Tunggu Hasil Pemeriksaan CT Scan Tanpa Kontras Target ≤ 120 Menit",                   target:"≤120 mnt",s:"Menit"},
+  {no:10, label:"Waktu Tunggu Hasil Pemeriksaan MRI Tanpa Kontras Target ≤ 180 Menit",                        target:"≤180 mnt",s:"Menit"},
+  {no:11, label:"Waktu Tunggu Upload Foto CT-Scan Tanpa Kontras ≤ 30 Menit",                                  target:"≥90%",   s:"%"},
+  {no:12, label:"Waktu Tunggu Upload Foto CT-Scan Dengan Kontras ≤ 60 Menit",                                 target:"≥90%",   s:"%"},
+  {no:13, label:"Waktu Tunggu Upload Foto MRI Tanpa Kontras ≤ 30 Menit",                                      target:"≥90%",   s:"%"},
+  {no:14, label:"Waktu Tunggu Upload Foto MRI Dengan Kontras ≤ 60 Menit",                                     target:"≥90%",   s:"%"},
+  {no:15, label:"Angka Kejadian Kesalahan Pemeriksaan Radiologi",                                              target:"0",      s:"kejadian"},
+  {no:16, label:"Kejadian Pasien Jatuh",                                                                       target:"0",      s:"kejadian"},
+  {no:17, label:"Kepatuhan Hand Hygiene / Cuci Tangan",                                                       target:"100%",   s:"%"},
+  {no:18, label:"Kepatuhan Identifikasi Pasien",                                                               target:"100%",   s:"%"},
+  {no:19, label:"Kepatuhan Penggunaan APD",                                                                    target:"100%",   s:"%"},
+  {no:20, label:"Kerusakan Alat Radiologi",                                                                    target:"≤5%",    s:"%"},
+  {no:21, label:"Angka Kejadian Kegagalan PME",                                                                target:"0",      s:"kejadian"},
+  {no:22, label:"Angka Kejadian Kegagalan PMI",                                                                target:"0",      s:"kejadian"},
+  {no:23, label:"Angka Kejadian Komplain Internal / Eksternal",                                                target:"0",      s:"kejadian"},
+  {no:24, label:"Waktu Tunggu Hasil Pemeriksaan Rontgen Panoramic Target ≤ 120 Menit",                        target:"≤120 mnt",s:"Menit"},
+  {no:25, label:"Prosentase Keterlambatan Pemeriksaan Rontgen Panoramic ≥ 120 Menit",                         target:"≤20%",   s:"%"},
 ];
 
 function buildInd() {
@@ -496,10 +495,11 @@ function buildInd() {
       <td><strong>${i.no}</strong></td>
       <td>${i.label}</td>
       <td><span class="badge bb">${i.target}</span></td>
-      <td><input type="number" id="i${i.no}" min="0" step="0.1" placeholder="—" oninput="calcRekap()"></td>
+      <td><input type="number" id="i${i.no}" min="0" step="0.1" placeholder="—" oninput="window.calcRekap()"></td>
       <td style="color:var(--g500);font-size:.77rem">${i.s}</td>
     </tr>`).join('');
 }
+window.buildInd = buildInd;
 
 // ── AUTO CALC FUNCTIONS ──
 window.calcRontgen = () => {
@@ -521,7 +521,7 @@ window.calcRekap = () => {
   let ter = 0;
   IND.forEach(i => { const el = document.getElementById('i'+i.no); if(el && el.value!=='') ter++; });
   document.getElementById('rekTer').textContent = ter;
-  document.getElementById('rekPct').textContent = Math.round((ter/26)*100)+'%';
+  document.getElementById('rekPct').textContent = Math.round((ter/25)*100)+'%';
 };
 
 // helpers
@@ -568,7 +568,7 @@ function collect() {
       cathlab:  {total:gv('cath_total'),p4:gv('cath_p4'),p3:gv('cath_p3'),ass:gv('cath_ass')}},
     pelayanan:{malam:gv('lap_malam'),igd_gagal:gv('order_igd')},
     indikator:ind,
-    rekap:{tercapai:parseInt(document.getElementById('rekTer').textContent)||0,total:26,persen:document.getElementById('rekPct').textContent},
+    rekap:{tercapai:parseInt(document.getElementById('rekTer').textContent)||0,total:25,persen:document.getElementById('rekPct').textContent},
     lainnya:{terlambat:gt('terlambat')},
     timestamp:Date.now()
   };
@@ -646,7 +646,7 @@ ${IL}
 
 *H. REKAP INDIKATOR*
 • Tercapai: ${d.rekap.tercapai}
-• Total: 26
+• Total: 25
 • Capaian: ${d.rekap.persen}
 
 *I. LAIN-LAIN*
@@ -739,11 +739,11 @@ function toast(msg,type=''){
 }
 
 // ── INIT ──
-buildInd();
 const today=new Date().toISOString().split('T')[0];
 document.getElementById('tglInput').value=today; updateDate();
 document.getElementById('dashDate').textContent=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
 addRow('ct'); addRow('mri'); addRow('usg');
+buildInd();
 </script>
 </body>
 </html>
