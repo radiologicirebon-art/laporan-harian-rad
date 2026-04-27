@@ -382,7 +382,7 @@ nav{background:#ffffff;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px r
     <div class="sh"><div class="si">📈</div><div><div class="st">G. Indikator Mutu Radiologi</div><div class="ss">25 indikator — Rekap otomatis dihitung</div></div></div>
     <div class="sb">
       <div style="overflow-x:auto">
-        <table class="it"><thead><tr><th>No</th><th>Indikator</th><th>Target</th><th>Capaian</th><th>Satuan</th></tr></thead>
+        <table class="it"><thead><tr><th>No</th><th>Indikator</th><th>Target</th><th>Capaian</th><th>Satuan</th><th>Status</th></tr></thead>
         <tbody id="indBody"></tbody></table>
       </div>
     </div>
@@ -499,6 +499,7 @@ function buildInd() {
       <td><span class="badge bb">${i.target}</span></td>
       <td><input type="number" id="i${i.no}" min="0" step="0.1" placeholder="—" oninput="window.calcRekap()"></td>
       <td style="color:var(--g500);font-size:.77rem">${i.s}</td>
+      <td><span class="badge bb" id="status${i.no}">—</span></td>
     </tr>`).join('');
 }
 window.buildInd = buildInd;
@@ -519,9 +520,45 @@ window.calcDist = (pfx) => {
   sv(`${pfx}_total`, grand);
 };
 window.calcLain = (pfx) => sv(`${pfx}_total`, n(`${pfx}_p4`)+n(`${pfx}_p3`)+n(`${pfx}_ass`));
+// Evaluate whether a single indicator's value meets its target
+function evalInd(i, val) {
+  if (val === '' || val === null || val === undefined) return null; // not filled
+  const v = parseFloat(val);
+  if (isNaN(v)) return null;
+  const t = i.target;
+  // Exact 0 target (kejadian = 0)
+  if (t === '0') return v === 0;
+  // ≤ numeric (e.g. "≤10 mnt", "≤30 mnt", "≤120 mnt", "≤180 mnt", "≤20%", "≤5%")
+  if (t.startsWith('≤')) {
+    const num = parseFloat(t.replace(/[^0-9.]/g,''));
+    return v <= num;
+  }
+  // ≥ numeric (e.g. "≥90%")
+  if (t.startsWith('≥')) {
+    const num = parseFloat(t.replace(/[^0-9.]/g,''));
+    return v >= num;
+  }
+  // Exact 100%
+  if (t === '100%') return v >= 100;
+  return null;
+}
+
 window.calcRekap = () => {
   let ter = 0;
-  IND.forEach(i => { const el = document.getElementById('i'+i.no); if(el && el.value!=='') ter++; });
+  IND.forEach(i => {
+    const el = document.getElementById('i'+i.no);
+    const val = el ? el.value : '';
+    const result = evalInd(i, val);
+    // Update row status badge
+    const badge = document.getElementById('status'+i.no);
+    if (badge) {
+      if (result === null) { badge.className='badge bb'; badge.textContent='—'; }
+      else if (result)     { badge.className='badge bg'; badge.textContent='✔ Tercapai'; ter++; }
+      else                 { badge.className='badge bd'; badge.textContent='✘ Belum'; }
+    } else if (result === true) {
+      ter++;
+    }
+  });
   document.getElementById('rekTer').textContent = ter;
   document.getElementById('rekPct').textContent = Math.round((ter/25)*100)+'%';
 };
